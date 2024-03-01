@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
 import 'package:lottie/lottie.dart';
-import 'package:smoe_app_final/views/Auth/sign_up_screen.dart';
 
 import '../../controllers/home_controller.dart';
 import '../../core/constant/app_text_styles.dart';
@@ -13,10 +14,10 @@ import '../../customWidgets/custom_container.dart';
 import '../../customWidgets/custom_padding.dart';
 import '../../customWidgets/custom_text.dart';
 import '../../customWidgets/custome_textfiled.dart';
-import '../HomeScreen/home_screen.dart';
+import 'otp_number.dart';
 
-class Login extends StatelessWidget {
-  const Login({super.key});
+class NumberPhone extends StatelessWidget {
+  const NumberPhone({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +29,7 @@ class Login extends StatelessWidget {
         children: [
           SingleChildScrollView(
             child: Form(
-              key: homeController.formLogin,
+              key: homeController.formSignPhoneAndName,
               child: Column(children: [
                 SizedBox(
                   height: 80.h,
@@ -36,7 +37,7 @@ class Login extends StatelessWidget {
                 Align(
                   alignment: Alignment.topCenter,
                   child: TextCustom(
-                      theText: "الدخول الان",
+                      theText: "الإنضمام للتطبيق",
                       fontSizeWidth: 23,
                       fontFamily: AppTextStyles.Almarai,
                       fontColor: AppColors.blackColorsTypeOne),
@@ -49,7 +50,7 @@ class Login extends StatelessWidget {
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 50.w),
                     child: Text(
-                      "عزيزي المستخدم قم لطفًا بإدخال بياناتك الخاصة للتزامن الان",
+                      "يُسرنا إختيارك ورغبتك للانضمام لتطبيقنا للتمتع بمختلف المزايا المُقدمة لك",
                       style: TextStyle(
                           height: 1.5.h,
                           fontSize: 15.5.sp,
@@ -60,81 +61,69 @@ class Login extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  height: 50.h,
+                  height: 20.h,
                 ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 30.w),
-                  child: TextFormFiledCustom(
-                    labelData: "الاسم",
-                    hintData: "قم لطفًا بإدخال الاسم ",
-                    iconData: Icons.person,
-                    controllerData: homeController.nameControllerLogin,
-                    value: (value) {
-                      homeController.nameLogin = value.toString();
-                      return value;
-                    },
-                    fillColor: AppColors.whiteColor,
-                    hintColor: AppColors.theAppColorYellow,
-                    iconColor: AppColors.theAppColorYellow,
-                    borderSideColor:
-                        AppColors.balckColorTypeThree.withOpacity(0.1),
-                    fontColor: AppColors.balckColorTypeThree,
-                    obscureText: false,
-                    keyboardType: TextInputType.text,
-                    autofillHints: [AutofillHints.name],
-                    onChanged: (value) {
-                      homeController.nameLogin = value.toString();
-                      return value;
-                    },
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "لم تقم بإدخال اي اسم".tr;
-                      }
-                      return value.length < 5 || value.length > 20
-                          ? "الرجاء قم بإدخال اسم صحيح".tr
-                          : null;
-                    },
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 50.w),
+                    child: Text(
+                      "رجاءًا قم بإدخال رقم الهاتف في الحقل التالي  للتقدم",
+                      style: TextStyle(
+                          height: 1.5.h,
+                          fontSize: 17.5.sp,
+                          fontFamily: AppTextStyles.Almarai,
+                          color: AppColors.balckColorTypeThree),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                 ),
                 SizedBox(
-                  height: 20.h,
+                  height: 40.h,
                 ),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 30.w),
-                  child: TextFormFiledCustom(
-                    labelData: "كلمة المرور",
-                    hintData: "قم لطفًا بإدخال كلمة المرور",
-                    iconData: Icons.password,
-                    controllerData: homeController.passwordControllerLogin,
-                    value: (value) {
-                      homeController.passwordLogin = value.toString();
-                      return value;
-                    },
-                    fillColor: AppColors.whiteColor,
-                    hintColor: AppColors.theAppColorYellow,
-                    iconColor: AppColors.theAppColorYellow,
-                    borderSideColor:
-                        AppColors.balckColorTypeThree.withOpacity(0.1),
-                    fontColor: AppColors.balckColorTypeThree,
-                    obscureText: true,
-                    keyboardType: TextInputType.text,
-                    autofillHints: [AutofillHints.name],
-                    onChanged: (value) {
-                      homeController.passwordLogin = value.toString();
-                      return value;
-                    },
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "لم تقم بإدخال اي رقم".tr;
-                      }
-                      return value.length < 5 || value.length > 20
-                          ? "رقم الهاتف ناقص ,,الرجاء الإكمال".tr
-                          : null;
-                    },
+                  padding: EdgeInsets.symmetric(horizontal: 10.w),
+                  child: SizedBox(
+                    width: 300.w,
+                    height: 50.h,
+                    child: Directionality(
+                      textDirection: TextDirection.ltr,
+                      child: InternationalPhoneNumberInput(
+                        selectorConfig: const SelectorConfig(
+                          selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
+                          setSelectorButtonAsPrefixIcon: true,
+                          leadingPadding: 20,
+                          useEmoji: true,
+                        ),
+                        onInputChanged: (PhoneNumber number) {
+                          SystemChrome.setEnabledSystemUIMode(
+                              SystemUiMode.manual,
+                              overlays: []);
+                          homeController.theNumber.value =
+                              number.phoneNumber.toString();
+                          print(number.phoneNumber);
+                        },
+                        onInputValidated: (bool value) {
+                          SystemChrome.setEnabledSystemUIMode(
+                              SystemUiMode.manual,
+                              overlays: []);
+                        },
+                        initialValue: PhoneNumber(isoCode: 'YE'),
+                        ignoreBlank: false,
+                        autoValidateMode: AutovalidateMode.disabled,
+                        selectorTextStyle: TextStyle(color: Colors.black),
+                        textFieldController: homeController.phoneController,
+                        formatInput: true,
+                        keyboardType: TextInputType.numberWithOptions(
+                            signed: true, decimal: true),
+                        inputBorder: OutlineInputBorder(),
+                        onSaved: (PhoneNumber number) {
+                          //   homeController.theNumber.value = number.;
+                          print('On Saved: $number');
+                        },
+                      ),
+                    ),
                   ),
-                ),
-                SizedBox(
-                  height: 20.h,
                 ),
                 SizedBox(
                   height: 10.h,
@@ -148,7 +137,7 @@ class Login extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          "لم تنضم بعد؟",
+                          "بالفعل قد أكملت عملية الإنضمام؟",
                           style: TextStyle(
                               height: 1.5.h,
                               fontSize: 13.5.sp,
@@ -161,10 +150,10 @@ class Login extends StatelessWidget {
                         ),
                         InkWell(
                           onTap: () {
-                            Get.to(SignUp());
+                            Get.offAll(const CodeNumber());
                           },
                           child: Text(
-                            "قم بالإنضمام الان",
+                            "قم بالتزامن الان",
                             style: TextStyle(
                                 height: 1.5.h,
                                 fontSize: 13.5.sp,
@@ -192,32 +181,50 @@ class Login extends StatelessWidget {
                 SizedBox(
                   height: 30.h,
                 ),
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 40.w),
+                    child: Text(
+                      "عند الضغط على الزر سيتم التحقق من  رقم الهاتف  قبل إكمال عملية الإنضمام,,رجاءًا تحلى بالصبر",
+                      style: TextStyle(
+                          height: 1.5.h,
+                          fontSize: 15.5.sp,
+                          fontFamily: AppTextStyles.Almarai,
+                          color:
+                              AppColors.balckColorTypeThree.withOpacity(0.5)),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 60.h,
+                ),
                 InkWell(
                   onTap: () {
-                    /*  homeController.loginAccounts(
-                        homeController.nameLogin.toString(),
-                        homeController.passwordLogin.toString());*/
+                    homeController
+                        .verifyPhoneNumber(homeController.theNumber.value);
                   },
                   child: ContainerCustom(
                     colorContainer: AppColors.theAppColorYellow,
                     widthContainer: 200,
                     heigthContainer: 40,
                     child: TextCustom(
-                        theText: "الدخول والمزامنة الان",
+                        theText: "التحقق الان",
                         fontSizeWidth: 16,
                         fontFamily: AppTextStyles.Almarai,
                         fontColor: AppColors.whiteColor),
                   ),
                 ),
                 SizedBox(
-                  height: 10.h,
+                  height: 20.h,
                 ),
                 Align(
                   alignment: Alignment.topCenter,
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 45.w),
                     child: Text(
-                      "نوصيك دائمًا بالإطلاع ومعرفة شروط واحكام تطبيق سموي  لتجنب اي اشكاليات قد تحدث",
+                      "في حال إنضمامك للتطبيق  فإنك توافق على شروط واحكام منصة تطبيق سموي",
                       style: TextStyle(
                           height: 1.5.h,
                           fontSize: 14.5.sp,
@@ -235,7 +242,7 @@ class Login extends StatelessWidget {
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 45.w),
                     child: Text(
-                      "قراءة الاحكام والشروط",
+                      "قراءة الشروط والأحكام",
                       style: TextStyle(
                           height: 1.5.h,
                           fontSize: 14.5.sp,
@@ -245,13 +252,13 @@ class Login extends StatelessWidget {
                       textAlign: TextAlign.center,
                     ),
                   ),
-                ),
+                )
               ]),
             ),
           ),
           GetX<HomeController>(
               builder: (controller) => Visibility(
-                  visible: controller.isLoadingTheScreenLogin.value,
+                  visible: controller.waitCheckNumber.value,
                   child: Container(
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height,
@@ -259,7 +266,7 @@ class Login extends StatelessWidget {
                   ))),
           GetX<HomeController>(
               builder: (controller) => Visibility(
-                  visible: controller.isLoadingTheScreenLogin.value,
+                  visible: controller.waitCheckNumber.value,
                   child: Container(
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height,
@@ -267,16 +274,16 @@ class Login extends StatelessWidget {
                   ))),
           GetX<HomeController>(
               builder: (controller) => Visibility(
-                  visible: controller.isLoadingTheScreenLogin.value,
+                  visible: controller.waitCheckNumber.value,
                   child: Align(
                     alignment: Alignment.center,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Lottie.asset(ImagesPath.loadingAnimation, width: 140.w),
+                        Lottie.asset(ImagesPath.loadingAnimation, width: 190.w),
                         Text(
-                          "انتظر قليلاً يتم تسجيل الدخول  والتاكد من البيانات ",
+                          "انتظر قليلاً يتم التحقق الان",
                           style: TextStyle(
                             color: AppColors.whiteColor,
                             fontFamily: AppTextStyles.Almarai,
@@ -288,7 +295,7 @@ class Login extends StatelessWidget {
                   ))),
           GetX<HomeController>(
               builder: (controller) => Visibility(
-                  visible: controller.isTheUserEnterTheRealyDataLogin.value,
+                  visible: controller.isAddTheUser.value,
                   child: Container(
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height,
@@ -296,7 +303,7 @@ class Login extends StatelessWidget {
                   ))),
           GetX<HomeController>(
               builder: (controller) => Visibility(
-                  visible: controller.isTheUserEnterTheRealyDataLogin.value,
+                  visible: controller.isAddTheUser.value,
                   child: Container(
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height,
@@ -304,7 +311,7 @@ class Login extends StatelessWidget {
                   ))),
           GetX<HomeController>(
               builder: (controller) => Visibility(
-                  visible: controller.isTheUserEnterTheRealyDataLogin.value,
+                  visible: controller.isAddTheUser.value,
                   child: PaddingCustom(
                     theTop: 190.h,
                     child: Align(
@@ -317,7 +324,7 @@ class Login extends StatelessWidget {
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 20.w),
                             child: Text(
-                              "عزيزي المستخدم تم تسجيل الدخول بنجاح,,قم بالضغط على الزر للتوجة للرئيسية",
+                              "تم بنجاح التحقق انقر للتقدم وإكمال عملية الإنضمام",
                               style: TextStyle(
                                 height: 1.7.h,
                                 color: AppColors.whiteColor,
@@ -332,8 +339,8 @@ class Login extends StatelessWidget {
                           ),
                           InkWell(
                             onTap: () {
-                              homeController.cleanTheLogin();
-                              homeController.goToHomeLoginSignUp();
+                              homeController.cleanWaitScreenAuthSignUp();
+                              Get.to(CodeNumber());
                             },
                             child: ContainerCustom(
                               widthContainer: 200.w,
@@ -354,7 +361,8 @@ class Login extends StatelessWidget {
                   ))),
           GetX<HomeController>(
               builder: (controller) => Visibility(
-                  visible: controller.isErrorAboutLoginTheUser.value,
+                  visible: controller.ErrorAboutNumber.value ||
+                      controller.isErrorAboutEnterOTP.value,
                   child: Container(
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height,
@@ -362,7 +370,8 @@ class Login extends StatelessWidget {
                   ))),
           GetX<HomeController>(
               builder: (controller) => Visibility(
-                  visible: controller.isErrorAboutLoginTheUser.value,
+                  visible: controller.ErrorAboutNumber.value ||
+                      controller.isErrorAboutEnterOTP.value,
                   child: Container(
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height,
@@ -370,7 +379,8 @@ class Login extends StatelessWidget {
                   ))),
           GetX<HomeController>(
               builder: (controller) => Visibility(
-                  visible: controller.isErrorAboutLoginTheUser.value,
+                  visible: controller.ErrorAboutNumber.value ||
+                      controller.isErrorAboutEnterOTP.value,
                   child: PaddingCustom(
                     theTop: 190.h,
                     child: Align(
@@ -383,7 +393,7 @@ class Login extends StatelessWidget {
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 20.w),
                             child: Text(
-                              "عزيزي المستخدم اسم المستخدم او كلمة المرور خاطئة,,الرجاء التاكد من صحتهم",
+                              "عزيزي المستخدم هناك إشكالية,,الرجاء إعادة المحاولة مرة أخرى",
                               style: TextStyle(
                                 height: 1.7.h,
                                 color: AppColors.whiteColor,
@@ -398,7 +408,7 @@ class Login extends StatelessWidget {
                           ),
                           InkWell(
                               onTap: () {
-                                homeController.cleanTheLogin();
+                                homeController.cleanTheSignUp();
                               },
                               child: ContainerCustom(
                                 widthContainer: 200.w,

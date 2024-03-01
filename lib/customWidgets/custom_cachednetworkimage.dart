@@ -13,6 +13,7 @@ class CustomCachedNetworkImage extends StatelessWidget {
   final double width;
   final double height;
   final BoxFit boxFit;
+  double circular;
 
   CustomCachedNetworkImage({
     super.key,
@@ -20,6 +21,7 @@ class CustomCachedNetworkImage extends StatelessWidget {
     required this.width,
     required this.height,
     required this.boxFit,
+    required this.circular,
   });
 
   @override
@@ -31,7 +33,7 @@ class CustomCachedNetworkImage extends StatelessWidget {
         imageUrl: ("${urlTheImage}"),
         imageBuilder: (context, imageProvider) => Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(circular),
                 image: DecorationImage(
                   image: imageProvider,
                   fit: boxFit,
@@ -40,11 +42,11 @@ class CustomCachedNetworkImage extends StatelessWidget {
             ),
         placeholder: (context, url) => SizedBox(
             child: ContainerCustom(
-                colorContainer: AppColors.TheMain,
+                colorContainer: AppColors.theAppColorYellow,
                 heigthContainer: height.h,
                 widthContainer: width.w,
                 child: TextCustom(
-                    theText: "Chocolate",
+                    theText: "SMOE",
                     fontSizeWidth: 20,
                     fontFamily: AppTextStyles.Marhey,
                     fontColor: AppColors.blackColor))));

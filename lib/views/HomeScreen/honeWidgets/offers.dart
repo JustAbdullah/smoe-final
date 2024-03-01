@@ -26,170 +26,146 @@ class _OffersState extends State<Offers> {
   @override
   Widget build(BuildContext context) {
     HomeController homeController = Get.put(HomeController());
-    return FutureBuilder(
-        future: homeController.getDataOffersFromDatabase(),
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if (snapshot.hasData) {
-            return Container(
-                width: MediaQuery.sizeOf(context).width,
-                color: AppColors.whiteColorTypeOne,
-                child: homeController.noData.value == true
-                    ? Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Lottie.asset(ImagesPath.noData, width: 200.w),
-                            SizedBox(
-                              height: 20.h,
+
+    return Obx(() {
+      return Container(
+          width: MediaQuery.sizeOf(context).width,
+          color: const Color.fromRGBO(250, 248, 248, 1),
+          child: homeController.isNotEmptyOffers.value
+              ? ContainerCustom(
+                  heigthContainer: 140,
+                  widthContainer: MediaQuery.of(context).size.width,
+                  colorContainer: AppColors.whiteColorTypeOne,
+                  child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: homeController.dataOffersList.length,
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        return PaddingCustom(
+                          theRight: 5,
+                          theLeft: 5,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: AppColors.whiteColor,
                             ),
-                            TextCustom(
-                                theText:
-                                    "لايوجد منتجات في هذا الفرع لهذا التصنيف",
-                                fontSizeWidth: 15,
-                                fontFamily: AppTextStyles.Almarai,
-                                fontWeight: FontWeight.bold,
-                                fontColor: AppColors.TheMain),
-                          ],
-                        ),
-                      )
-                    : ContainerCustom(
-                        heigthContainer: 140,
-                        widthContainer: MediaQuery.of(context).size.width,
-                        colorContainer: AppColors.whiteColorTypeOne,
-                        child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: snapshot.data['data'].length,
-                            shrinkWrap: true,
-                            itemBuilder: (context, i) {
-                              return PaddingCustom(
-                                theRight: 5,
-                                theLeft: 5,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color: AppColors.whiteColor,
-                                  ),
-                                  height: 140.h,
-                                  width: 220.w,
-                                  child: SingleChildScrollView(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        InkWell(
-                                          onTap: () {},
-                                          child: CustomCachedNetworkImage(
-                                            urlTheImage: snapshot.data['data']
-                                                    [i]['offer_image']
-                                                .toString(),
-                                            width: 220.w,
-                                            height: 90,
-                                            boxFit: BoxFit.cover,
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: 5.h,
-                                        ),
-                                        Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 4.w),
-                                          child: Text(
-                                            snapshot.data['data'][i]
-                                                ['offer_name'],
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              color:
-                                                  AppColors.balckColorTypeThree,
-                                              fontFamily: AppTextStyles.Almarai,
-                                              fontSize: 14.sp,
-                                            ),
-                                            textAlign: TextAlign.center,
-                                            maxLines: 1,
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: 10.h,
-                                        ),
-                                        Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            TextCustom(
-                                              theText: snapshot.data['data'][i]
-                                                  ['offer_price'],
-                                              fontColor:
-                                                  AppColors.balckColorTypeThree,
-                                              fontFamily: AppTextStyles.Almarai,
-                                              fontSizeWidth: 12,
-                                            ),
-                                            SizedBox(
-                                              width: 2.w,
-                                            ),
-                                            TextCustom(
-                                              theText: "ريال",
-                                              fontColor:
-                                                  AppColors.balckColorTypeThree,
-                                              fontFamily: AppTextStyles.Almarai,
-                                              fontSizeWidth: 12,
-                                            ),
-                                          ],
-                                        ),
-                                      ],
+                            height: 140.h,
+                            width: 205.w,
+                            child: SingleChildScrollView(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  InkWell(
+                                    onTap: () {},
+                                    child: CustomCachedNetworkImage(
+                                      urlTheImage: homeController
+                                          .dataOffersList[index].img
+                                          .toString(),
+                                      width: 205.w,
+                                      height: 100,
+                                      boxFit: BoxFit.cover,
+                                      circular: 10,
                                     ),
                                   ),
-                                ),
-                              );
-                            }),
-                      ));
-          } else {
-            return ContainerCustom(
-                heigthContainer: 120,
-                widthContainer: 1300,
-                colorContainer: AppColors.whiteColorTypeOne,
-                child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: 5,
-                    shrinkWrap: true,
-                    itemBuilder: (context, i) {
-                      return Shimmer.fromColors(
-                          baseColor: Color.fromARGB(31, 83, 82, 82),
-                          highlightColor: AppColors.whiteColor,
-                          enabled: true,
-                          child: PaddingCustom(
-                              theRight: 1,
-                              theLeft: 1,
-                              child: Column(children: [
-                                ContainerCustomApi(
-                                  colorContainer: AppColors.whiteColorTypeOne,
-                                  boxShape: BoxShape.circle,
-                                  heigthContainer: 70.h,
-                                  child: Image.asset(
-                                    "${ImagesPath.LogoApp}",
-                                    width: 80,
-                                    height: 100,
-                                    fit: BoxFit.contain,
+                                  SizedBox(
+                                    height: 5.h,
                                   ),
-                                ),
-                                SizedBox(
-                                  height: 19.h,
-                                ),
-                                Shimmer.fromColors(
-                                    baseColor: Color.fromARGB(31, 83, 82, 82),
-                                    highlightColor: AppColors.whiteColor,
-                                    enabled: true,
-                                    child: TextCustom(
-                                      theText: "يتم التحميل",
-                                      fontColor: AppColors.whiteColor,
-                                      fontFamily: AppTextStyles.Marhey,
-                                      fontSizeWidth: 15,
-                                    )),
-                              ])));
-                    }));
-          }
-        });
+                                  Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 4.w),
+                                    child: Text(
+                                      homeController.dataOffersList[index].name
+                                          .toString(),
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: AppColors.balckColorTypeThree,
+                                        fontFamily: AppTextStyles.Almarai,
+                                        fontSize: 14.sp,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                      maxLines: 1,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10.h,
+                                  ),
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      TextCustom(
+                                        theText: homeController
+                                            .dataOffersList[index].price
+                                            .toString(),
+                                        fontColor:
+                                            AppColors.balckColorTypeThree,
+                                        fontFamily: AppTextStyles.Almarai,
+                                        fontSizeWidth: 12,
+                                      ),
+                                      SizedBox(
+                                        width: 2.w,
+                                      ),
+                                      TextCustom(
+                                        theText: "ريال",
+                                        fontColor:
+                                            AppColors.balckColorTypeThree,
+                                        fontFamily: AppTextStyles.Almarai,
+                                        fontSizeWidth: 12,
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      }),
+                )
+              : ContainerCustom(
+                  heigthContainer: 120,
+                  widthContainer: 1300,
+                  colorContainer: AppColors.whiteColorTypeOne,
+                  child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: 5,
+                      shrinkWrap: true,
+                      itemBuilder: (context, i) {
+                        return Shimmer.fromColors(
+                            baseColor: Color.fromARGB(31, 83, 82, 82),
+                            highlightColor: AppColors.whiteColor,
+                            enabled: true,
+                            child: PaddingCustom(
+                                theRight: 1,
+                                theLeft: 1,
+                                child: Column(children: [
+                                  ContainerCustomApi(
+                                    colorContainer: AppColors.whiteColorTypeOne,
+                                    boxShape: BoxShape.circle,
+                                    heigthContainer: 70.h,
+                                    child: Image.asset(
+                                      "${ImagesPath.LogoApp}",
+                                      width: 80,
+                                      height: 100,
+                                      fit: BoxFit.contain,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 19.h,
+                                  ),
+                                  Shimmer.fromColors(
+                                      baseColor: Color.fromARGB(31, 83, 82, 82),
+                                      highlightColor: AppColors.whiteColor,
+                                      enabled: true,
+                                      child: TextCustom(
+                                        theText: "يتم التحميل",
+                                        fontColor: AppColors.whiteColor,
+                                        fontFamily: AppTextStyles.Marhey,
+                                        fontSizeWidth: 15,
+                                      )),
+                                ])));
+                      })));
+    });
   }
 }

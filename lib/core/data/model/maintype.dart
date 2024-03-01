@@ -1,7 +1,7 @@
 class maintype {
-  int? id;
-  String? name;
-  String? img;
+  var id;
+  var name;
+  var img;
 
   maintype({required this.id, required this.name, required this.img});
 

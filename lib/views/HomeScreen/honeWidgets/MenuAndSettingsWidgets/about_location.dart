@@ -13,8 +13,6 @@ class AboutLocation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    HomeController homeController = Get.put(HomeController());
-
     return GetX<HomeController>(
         builder: (controller) => Visibility(
             visible: controller.aboutLocation.value,
@@ -110,7 +108,7 @@ class AboutLocation extends StatelessWidget {
                             height: 0.h,
                           ),
                           Text(
-                            homeController.address.value,
+                            controller.address.value,
                             style: TextStyle(
                                 height: 1.5.h,
                                 fontSize: 13.sp,

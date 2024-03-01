@@ -1,15 +1,16 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:smoe_app_final/ttt.dart';
-
+import 'package:firebase_core/firebase_core.dart';
+import 'package:smoe_app_final/views/HomeScreen/home_screen.dart';
+import 'firebase_options.dart';
 import 'core/constant/color_primary.dart';
 import 'core/localization/changelanguage.dart';
 import 'core/localization/translation.dart';
 import 'core/services/appservices.dart';
-import 'views/Auth/login_screen.dart';
-import 'views/Auth/sign_up_screen.dart';
+import 'views/Auth/number_phone.dart';
 import 'views/loadingScreen/loading_screen.dart';
 
 Future<void> main() async {
@@ -19,8 +20,13 @@ Future<void> main() async {
   );*/
   // Stripe.publishableKey = ApiKeysStripe.Publishablekey;
 
+// ...
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   await initialServices();
-  /* FirebaseMessaging.instance.subscribeToTopic("all");*/
+  FirebaseMessaging.instance.subscribeToTopic("all");
   runApp(MaterialApp(debugShowCheckedModeBanner: false, home: const MyApp()));
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
@@ -53,7 +59,7 @@ class MyApp extends StatelessWidget {
       home: Scaffold(
           body: SafeArea(
               child: ScreenUtilInit(
-                  designSize: Size(360, 690), child: LoadingScreen()))),
+                  designSize: Size(360, 690), child: HomeScreen()))),
       theme: ThemeData(primarySwatch: ModeColor.mode),
       builder: (context, child) {
         final mediaQueryData = MediaQuery.of(context);

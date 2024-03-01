@@ -12,18 +12,17 @@ import '../../customWidgets/custom_container_api.dart';
 import '../../customWidgets/custom_padding.dart';
 import '../../customWidgets/custom_text.dart';
 import '../../customWidgets/custome_textfiled.dart';
-import '../Auth/sign_up_screen.dart';
-import '../types_api/list_of_types_works_api.dart';
 import 'honeWidgets/MenuAndSettingsWidgets/about_location.dart';
 import 'honeWidgets/MenuAndSettingsWidgets/choose_language.dart';
 import 'honeWidgets/MenuAndSettingsWidgets/get_location.dart';
 import 'honeWidgets/MenuAndSettingsWidgets/info_account.dart';
 import 'honeWidgets/MenuAndSettingsWidgets/settings_menu.dart';
 import 'honeWidgets/MenuAndSettingsWidgets/show_location.dart';
-import 'honeWidgets/highest_rating.dart';
+import 'honeWidgets/ProductrsDetails/products_details.dart';
+import 'honeWidgets/ProductrsDetails/show_message_add_into_cart.dart';
+import 'honeWidgets/all_products.dart';
 import 'honeWidgets/main_types.dart';
 import 'honeWidgets/offers.dart';
-import 'honeWidgets/offers_list.dart';
 import 'honeWidgets/top_header.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -67,30 +66,17 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
                   PaddingCustom(
-                      theTop: 0,
+                      theTop: 10,
                       theBottom: 0,
                       theLeft: 0,
                       theRight: 0,
                       child: Align(
                           alignment: Alignment.topRight, child: Favorites())),
-                  PaddingCustom(
-                      theTop: 20,
-                      theBottom: 0,
-                      theLeft: 5,
-                      theRight: 5,
-                      child: Align(
-                        alignment: Alignment.topRight,
-                        child: TextCustom(
-                            theText: "البحث وجميع المنتجات",
-                            fontSizeWidth: 23,
-                            fontFamily: AppTextStyles.Cairo,
-                            fontColor: AppColors.TheMain),
-                      )),
                   SizedBox(
-                    height: 30.h,
+                    height: 15.h,
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 17.w),
+                    padding: EdgeInsets.symmetric(horizontal: 23.w),
                     child: TextFormFiledCustom(
                       labelData: "ابحث عن اسم منتج ما",
                       hintData: "قم لطفًا بإدخال الاسم ",
@@ -99,10 +85,10 @@ class HomeScreen extends StatelessWidget {
                       value: (value) {
                         return value;
                       },
-                      fillColor: AppColors.whiteColor,
-                      hintColor: AppColors.TheMain,
-                      iconColor: AppColors.TheMain,
-                      borderSideColor: AppColors.whiteColor,
+                      fillColor: AppColors.theAppColorYellow,
+                      hintColor: AppColors.balckColorTypeFour,
+                      iconColor: AppColors.balckColorTypeFour,
+                      borderSideColor: AppColors.theAppColorYellow,
                       fontColor: AppColors.balckColorTypeThree,
                       obscureText: false,
                       keyboardType: TextInputType.text,
@@ -115,11 +101,10 @@ class HomeScreen extends StatelessWidget {
                   ),
                   PaddingCustom(
                       theTop: 10,
-                      theBottom: 30,
+                      theBottom: 10,
                       theLeft: 0,
                       child: Align(
-                          alignment: Alignment.topRight,
-                          child: HighestRating())),
+                          alignment: Alignment.topRight, child: AllProductd())),
                 ]),
               ),
             ),
@@ -131,7 +116,7 @@ class HomeScreen extends StatelessWidget {
                   alignment: Alignment.center,
                   width: MediaQuery.of(context).size.width,
                   height: 60.h,
-                  color: AppColors.theAppColorYellow,
+                  color: AppColors.whiteColorTypeOne,
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10.w),
                     child: SingleChildScrollView(
@@ -142,15 +127,13 @@ class HomeScreen extends StatelessWidget {
                           children: [
                             Container(
                                 alignment: Alignment.center,
-                                color: AppColors.theAppColorYellow,
+                                color: AppColors.whiteColorTypeOne,
                                 height: 55.h,
                                 child: Padding(
                                     padding:
                                         EdgeInsets.symmetric(horizontal: 10.w),
                                     child: InkWell(
-                                      onTap: () {
-                                        Get.to(SignUp());
-                                      },
+                                      onTap: () {},
                                       child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
@@ -197,15 +180,13 @@ class HomeScreen extends StatelessWidget {
                             ),
                             Container(
                                 alignment: Alignment.center,
-                                color: AppColors.theAppColorYellow,
+                                color: AppColors.whiteColorTypeOne,
                                 height: 55.h,
                                 child: Padding(
                                     padding:
                                         EdgeInsets.symmetric(horizontal: 10.w),
                                     child: InkWell(
-                                      onTap: () {
-                                        Get.to(SignUp());
-                                      },
+                                      onTap: () {},
                                       child: Row(
                                         children: [
                                           Padding(
@@ -247,12 +228,10 @@ class HomeScreen extends StatelessWidget {
                               width: 15.w,
                             ),
                             InkWell(
-                              onTap: () {
-                                Get.to(SignUp());
-                              },
+                              onTap: () {},
                               child: Container(
                                   alignment: Alignment.center,
-                                  color: AppColors.theAppColorYellow,
+                                  color: AppColors.whiteColorTypeOne,
                                   height: 55.h,
                                   child: Padding(
                                       padding: EdgeInsets.symmetric(
@@ -302,7 +281,7 @@ class HomeScreen extends StatelessWidget {
                             ),
                             Container(
                                 alignment: Alignment.center,
-                                color: AppColors.theAppColorYellow,
+                                color: AppColors.whiteColorTypeOne,
                                 height: 55.h,
                                 child: Padding(
                                     padding:
@@ -357,32 +336,14 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
             ),
-            /*    GetX<HomeController>(
-                builder: (controller) => Visibility(
-                    visible: controller.showTheBranch.value,
-                    child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height,
-                      color: Colors.black38,
-                    ))),
-            GetX<HomeController>(
-                builder: (controller) => Visibility(
-                    visible: controller.showTheBranch.value,
-                    child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height,
-                      color: Colors.black38,
-                    ))),
-            GetX<HomeController>(
-                builder: (controller) => Visibility(
-                    visible: controller.showTheBranch.value,
-                    child: ListOfBranchApi())),*/
+            ProductsDetails(),
             SettingsMenu(),
             InfoAcount(),
             AboutLocation(),
             GetLocation(),
             ShowTheLocation(),
             ChooseLanguage(),
+            AddIntoListCart()
           ],
         ),
       ),
