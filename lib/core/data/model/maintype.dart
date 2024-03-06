@@ -7,7 +7,7 @@ class maintype {
 
   factory maintype.fromJson(Map<String, dynamic> json) {
     return maintype(
-      id: json['id'] ?? 0,
+      id: json['type_id'] ?? 1,
       name: json['type_name_ar'] ?? 'Default Title',
       img: json['type_image'] ?? 'Default image',
     );

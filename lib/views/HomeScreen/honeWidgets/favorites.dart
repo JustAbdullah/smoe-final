@@ -27,14 +27,14 @@ class Favorites extends StatelessWidget {
           width: MediaQuery.sizeOf(context).width,
           color: AppColors.whiteColorTypeOne,
           height: 130.h,
-          child: homeController.isNotEmptyProducrs.value == true
+          child: homeController.isNotEmptyProducrsByType.value == true
               ? ContainerCustom(
                   heigthContainer: 130,
                   widthContainer: MediaQuery.of(context).size.width,
                   colorContainer: AppColors.whiteColorTypeOne,
                   child: ListView.builder(
                       scrollDirection: Axis.horizontal,
-                      itemCount: homeController.dataProductsList.length,
+                      itemCount: homeController.dataProductsListByType.length,
                       shrinkWrap: true,
                       itemBuilder: (context, index) {
                         return PaddingCustom(
@@ -59,7 +59,7 @@ class Favorites extends StatelessWidget {
                                     child: CustomCachedNetworkImage(
                                       circular: 10,
                                       urlTheImage: homeController
-                                          .dataProductsList[index].img
+                                          .dataProductsListByType[index].img
                                           .toString(),
                                       width: 130.w,
                                       height: 80,
@@ -74,7 +74,7 @@ class Favorites extends StatelessWidget {
                                         EdgeInsets.symmetric(horizontal: 4.w),
                                     child: Text(
                                       homeController
-                                          .dataProductsList[index].name
+                                          .dataProductsListByType[index].name
                                           .toString(),
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
@@ -96,7 +96,7 @@ class Favorites extends StatelessWidget {
                                     children: [
                                       TextCustom(
                                         theText: homeController
-                                            .dataProductsList[index].price
+                                            .dataProductsListByType[index].price
                                             .toString(),
                                         fontColor:
                                             AppColors.balckColorTypeThree,

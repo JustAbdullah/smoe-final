@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:smoe_app_final/views/HomeScreen/honeWidgets/all_products_searching.dart';
 import 'package:smoe_app_final/views/HomeScreen/honeWidgets/favorites.dart';
 
 import '../../controllers/home_controller.dart';
@@ -12,6 +14,9 @@ import '../../customWidgets/custom_container_api.dart';
 import '../../customWidgets/custom_padding.dart';
 import '../../customWidgets/custom_text.dart';
 import '../../customWidgets/custome_textfiled.dart';
+import '../../customWidgets/search_text_filed.dart';
+import 'honeWidgets/TheOrder/order_list.dart';
+import 'honeWidgets/TheOrderInCart/order.dart';
 import 'honeWidgets/MenuAndSettingsWidgets/about_location.dart';
 import 'honeWidgets/MenuAndSettingsWidgets/choose_language.dart';
 import 'honeWidgets/MenuAndSettingsWidgets/get_location.dart';
@@ -76,35 +81,58 @@ class HomeScreen extends StatelessWidget {
                     height: 15.h,
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 23.w),
-                    child: TextFormFiledCustom(
-                      labelData: "ابحث عن اسم منتج ما",
-                      hintData: "قم لطفًا بإدخال الاسم ",
-                      iconData: Icons.search,
-                      controllerData: homeController.nameControllerLogin,
-                      value: (value) {
-                        return value;
-                      },
-                      fillColor: AppColors.theAppColorYellow,
-                      hintColor: AppColors.balckColorTypeFour,
-                      iconColor: AppColors.balckColorTypeFour,
-                      borderSideColor: AppColors.theAppColorYellow,
-                      fontColor: AppColors.balckColorTypeThree,
-                      obscureText: false,
-                      keyboardType: TextInputType.text,
-                      autofillHints: [AutofillHints.name],
-                      onChanged: (value) {
-                        return value;
-                      },
-                      validator: (value) {},
-                    ),
-                  ),
+                      padding: EdgeInsets.symmetric(horizontal: 23.w),
+                      child: GetX<HomeController>(
+                        builder: (controller) => TextFormFiledCustomSearch(
+                          labelData: "ابحث عن اسم منتج ما",
+                          hintData: "قم لطفًا بإدخال الاسم ",
+                          iconData: controller.isSearching.value == true
+                              ? Icons.close
+                              : Icons.search,
+                          controllerData: homeController.searchingControllr,
+                          value: (value) {
+                            SystemChrome.setEnabledSystemUIMode(
+                                SystemUiMode.manual,
+                                overlays: []);
+                            controller.searching = value.toString();
+                            return value;
+                          },
+                          fillColor: AppColors.theAppColorYellow,
+                          hintColor: AppColors.balckColorTypeFour,
+                          iconColor: controller.isSearching.value == true
+                              ? AppColors.redColor
+                              : AppColors.balckColorTypeThree,
+                          borderSideColor: AppColors.theAppColorYellow,
+                          fontColor: AppColors.balckColorTypeThree,
+                          obscureText: false,
+                          keyboardType: TextInputType.text,
+                          autofillHints: [AutofillHints.name],
+                          onChanged: (value) {
+                            SystemChrome.setEnabledSystemUIMode(
+                                SystemUiMode.manual,
+                                overlays: []);
+
+                            controller.searching = value.toString();
+                            return value;
+                          },
+                          validator: (value) {},
+                          onTap: () {
+                            controller.makeSearchingReady(
+                                controller.searching.toString());
+                          },
+                        ),
+                      )),
                   PaddingCustom(
                       theTop: 10,
                       theBottom: 10,
                       theLeft: 0,
                       child: Align(
-                          alignment: Alignment.topRight, child: AllProductd())),
+                          alignment: Alignment.topRight,
+                          child: GetX<HomeController>(
+                              builder: (Thecontroller) =>
+                                  Thecontroller.isSearching.value == true
+                                      ? AllProductdSearching()
+                                      : AllProductd()))),
                 ]),
               ),
             ),
@@ -116,7 +144,7 @@ class HomeScreen extends StatelessWidget {
                   alignment: Alignment.center,
                   width: MediaQuery.of(context).size.width,
                   height: 60.h,
-                  color: AppColors.whiteColorTypeOne,
+                  color: AppColors.blackColor,
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10.w),
                     child: SingleChildScrollView(
@@ -127,7 +155,7 @@ class HomeScreen extends StatelessWidget {
                           children: [
                             Container(
                                 alignment: Alignment.center,
-                                color: AppColors.whiteColorTypeOne,
+                                color: AppColors.blackColor,
                                 height: 55.h,
                                 child: Padding(
                                     padding:
@@ -167,7 +195,7 @@ class HomeScreen extends StatelessWidget {
                                                               AppTextStyles
                                                                   .Almarai,
                                                           fontColor: AppColors
-                                                              .TheMain),
+                                                              .whiteColor),
                                                     ],
                                                   ),
                                                 ],
@@ -180,13 +208,16 @@ class HomeScreen extends StatelessWidget {
                             ),
                             Container(
                                 alignment: Alignment.center,
-                                color: AppColors.whiteColorTypeOne,
+                                color: AppColors.blackColor,
                                 height: 55.h,
                                 child: Padding(
                                     padding:
                                         EdgeInsets.symmetric(horizontal: 10.w),
                                     child: InkWell(
-                                      onTap: () {},
+                                      onTap: () {
+                                        homeController.fetchProductsDataCart();
+                                        homeController.showCart.value = true;
+                                      },
                                       child: Row(
                                         children: [
                                           Padding(
@@ -216,7 +247,7 @@ class HomeScreen extends StatelessWidget {
                                                               AppTextStyles
                                                                   .Almarai,
                                                           fontColor: AppColors
-                                                              .TheMain),
+                                                              .whiteColor),
                                                     ],
                                                   ),
                                                 ],
@@ -231,13 +262,15 @@ class HomeScreen extends StatelessWidget {
                               onTap: () {},
                               child: Container(
                                   alignment: Alignment.center,
-                                  color: AppColors.whiteColorTypeOne,
+                                  color: AppColors.blackColor,
                                   height: 55.h,
                                   child: Padding(
                                       padding: EdgeInsets.symmetric(
                                           horizontal: 10.w),
                                       child: InkWell(
-                                        onTap: () {},
+                                        onTap: () {
+                                          homeController.viewOrderList();
+                                        },
                                         child: Row(
                                           children: [
                                             Padding(
@@ -267,7 +300,7 @@ class HomeScreen extends StatelessWidget {
                                                                 AppTextStyles
                                                                     .Almarai,
                                                             fontColor: AppColors
-                                                                .TheMain),
+                                                                .whiteColor),
                                                       ],
                                                     ),
                                                   ],
@@ -281,7 +314,7 @@ class HomeScreen extends StatelessWidget {
                             ),
                             Container(
                                 alignment: Alignment.center,
-                                color: AppColors.whiteColorTypeOne,
+                                color: AppColors.blackColor,
                                 height: 55.h,
                                 child: Padding(
                                     padding:
@@ -320,8 +353,8 @@ class HomeScreen extends StatelessWidget {
                                                         fontFamily:
                                                             AppTextStyles
                                                                 .Almarai,
-                                                        fontColor:
-                                                            AppColors.TheMain),
+                                                        fontColor: AppColors
+                                                            .whiteColor),
                                                   ],
                                                 ),
                                               ],
@@ -343,7 +376,9 @@ class HomeScreen extends StatelessWidget {
             GetLocation(),
             ShowTheLocation(),
             ChooseLanguage(),
-            AddIntoListCart()
+            AddIntoListCart(),
+            Order(),
+            TheOrderListUser(),
           ],
         ),
       ),

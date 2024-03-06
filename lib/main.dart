@@ -59,7 +59,7 @@ class MyApp extends StatelessWidget {
       home: Scaffold(
           body: SafeArea(
               child: ScreenUtilInit(
-                  designSize: Size(360, 690), child: HomeScreen()))),
+                  designSize: Size(360, 690), child: LoadingScreen()))),
       theme: ThemeData(primarySwatch: ModeColor.mode),
       builder: (context, child) {
         final mediaQueryData = MediaQuery.of(context);

@@ -137,7 +137,7 @@ class SettingsMenu extends StatelessWidget {
                                     controller.messageAboutNotHaveAccount
                                         .value = true;
                                   } else {
-                                    //   controller.showTheOrderPage.value = true;
+                                    controller.showTheOrderList.value = true;
                                   }
                                 },
                                 child: Row(

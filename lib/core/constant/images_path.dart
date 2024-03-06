@@ -1,7 +1,7 @@
 class ImagesPath {
   static const String RootPath = "android/assets/images";
 
-  static const String loadingAnimation = "$RootPath/LoadingApp.json";
+  static const String loadingAnimation = "$RootPath/LoadingNew.json";
 
   static const String LogoApp = "$RootPath/play_store_512.png";
   static const String ShoppingCart = "$RootPath/icons8-shopping-cart-90.png";
@@ -25,4 +25,13 @@ class ImagesPath {
   static const String success = "$RootPath/success.json";
   static const String error = "$RootPath/error.json";
   static const String auth = "$RootPath/verification.json";
+  static const String locationIcon = "$RootPath/location.json";
+  ////////////////...........OnBoarding.................//////////
+
+  static const String OnBoardingOne = "$RootPath/onBoarding1.json";
+  static const String OnBoardingTwo = "$RootPath/onBoarding2.json";
+  static const String OnBoardingThree = "$RootPath/onBoarding3.json";
+  static const String Welcome = "$RootPath/Weclome.json";
+
+  ///
 }

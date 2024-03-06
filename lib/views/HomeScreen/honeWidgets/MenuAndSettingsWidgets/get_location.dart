@@ -106,7 +106,7 @@ class GetLocation extends StatelessWidget {
                           SizedBox(
                             height: 5.h,
                           ),
-                          Lottie.asset(ImagesPath.location),
+                          Lottie.asset(ImagesPath.locationIcon),
                           SizedBox(
                             height: 45.h,
                           ),

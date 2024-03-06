@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:smoe_app_final/core/constant/images_path.dart';
 import 'package:smoe_app_final/customWidgets/custom_padding.dart';
 import 'package:smoe_app_final/views/HomeScreen/honeWidgets/ProductrsDetails/extras.dart';
 
@@ -250,11 +251,7 @@ class ProductsDetails extends StatelessWidget {
                                           color: AppColors.redColor,
                                           borderRadius:
                                               BorderRadius.circular(5)),
-                                      child: TextCustom(
-                                          theText: "-",
-                                          fontSizeWidth: 25.sp,
-                                          fontFamily: AppTextStyles.Almarai,
-                                          fontColor: AppColors.whiteColor),
+                                      child: Image.asset(ImagesPath.minus),
                                     )),
                                 SizedBox(
                                   width: 10.w,
@@ -278,23 +275,19 @@ class ProductsDetails extends StatelessWidget {
                                   width: 10.w,
                                 ),
                                 InkWell(
-                                  onTap: () {
-                                    controller.AddTheItme();
-                                  },
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    width: 40.w,
-                                    height: 20.h,
-                                    decoration: BoxDecoration(
-                                        color: Colors.green,
-                                        borderRadius: BorderRadius.circular(5)),
-                                    child: TextCustom(
-                                        theText: "+",
-                                        fontSizeWidth: 25.sp,
-                                        fontFamily: AppTextStyles.Almarai,
-                                        fontColor: AppColors.whiteColor),
-                                  ),
-                                ),
+                                    onTap: () {
+                                      controller.AddTheItme();
+                                    },
+                                    child: Container(
+                                      alignment: Alignment.center,
+                                      width: 40.w,
+                                      height: 20.h,
+                                      decoration: BoxDecoration(
+                                          color: Colors.green,
+                                          borderRadius:
+                                              BorderRadius.circular(5)),
+                                      child: Image.asset(ImagesPath.plus),
+                                    )),
                               ],
                             ),
                           )),
@@ -355,7 +348,7 @@ class ProductsDetails extends StatelessWidget {
                             children: [
                               Align(
                                 child: InkWell(
-                                  onTap: () {
+                                  onTap: () async {
                                     controller.generateRandomOrderNumber();
                                     controller.addIntListProducts(
                                         controller.randomNumber.toString(),
@@ -368,30 +361,34 @@ class ProductsDetails extends StatelessWidget {
                                             .toString(),
                                         controller.TheNumberOfItme.value
                                             .toString());
-
-                                    controller.chosedTheExtras.isEmpty
-                                        ? {}
-                                        : {
-                                            controller.chosedTheExtras
-                                                .forEach((k, v) {
-                                              controller.addIntListProductsEtr(
-                                                controller.randomNumber
-                                                    .toString(),
-                                                controller
-                                                    .dataProductsList[controller
-                                                        .indexTheProductsList
-                                                        .value]
-                                                    .id
-                                                    .toString(),
-                                                v.toString(),
-                                              );
-                                              print(v.toString());
-                                              print("/////////////////");
-                                            }),
-                                          };
-
                                     controller.MessageAddedIntoList.value =
                                         true;
+                                    await Future.delayed(
+                                        const Duration(seconds: 3), () async {
+                                      controller.chosedTheExtras.isEmpty
+                                          ? {}
+                                          : {
+                                              controller.chosedTheExtras
+                                                  .forEach((k, v) {
+                                                controller.addIntListProductsEtr(
+                                                    controller.randomNumber
+                                                        .toString(),
+                                                    controller
+                                                        .dataProductsList[controller
+                                                            .indexTheProductsList
+                                                            .value]
+                                                        .id
+                                                        .toString(),
+                                                    v.toString(),
+                                                    controller
+                                                        .getIdOfListProducts
+                                                        .value
+                                                        .toString());
+                                                print(v.toString());
+                                                print("/////////////////");
+                                              }),
+                                            };
+                                    });
                                   },
                                   child: Container(
                                     alignment: Alignment.center,

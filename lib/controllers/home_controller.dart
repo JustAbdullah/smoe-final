@@ -3,6 +3,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
@@ -10,10 +11,16 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
+import 'package:smoe_app_final/views/onBoarding/onboarding.dart';
 
 import '../core/class/class/crud.dart';
 
 import '../core/data/model/extras.dart';
+import '../core/data/model/list_of_order.dart';
+import '../core/data/model/list_products_cart.dart';
+import '../core/data/model/list_products_extras_cart.dart';
 import '../core/data/model/maintype.dart';
 import '../core/data/model/offers.dart';
 import '../core/data/model/products.dart';
@@ -39,7 +46,7 @@ class HomeController extends GetxController {
 
   goToHome() async {
     await Future.delayed(const Duration(seconds: 5), () async {
-      Get.offAll(HomeScreen());
+      Get.offAll(OnBoarding());
     });
   }
 
@@ -65,69 +72,6 @@ class HomeController extends GetxController {
   RxBool IsrequestPermissionDenied = false.obs;
   final Completer<GoogleMapController> controller =
       Completer<GoogleMapController>();
-
-  RxString address = "لايوجد عنوان".obs;
-  Future getPo() async {
-    bool services;
-    LocationPermission per;
-    services = await Geolocator.isLocationServiceEnabled();
-    if (services == true) {
-      per = await Geolocator.checkPermission();
-      if (per == LocationPermission.denied) {
-        per = await Geolocator.requestPermission();
-      } else {
-        await Geolocator.getCurrentPosition().then((value) {
-          myCurrentPositionLatitude = value.latitude;
-          myCurrentPositionLongitude = value.longitude;
-        });
-      }
-    }
-  }
-
-  Future checkIsEnableLocationServices() async {
-    checkTheLocation.value = true;
-    bool services;
-    LocationPermission per;
-    await Future.delayed(Duration(seconds: 3), () async {
-      services = await Geolocator.isLocationServiceEnabled();
-      if (services == true) {
-        per = await Geolocator.checkPermission();
-        if (per == LocationPermission.denied) {
-          IsrequestPermissionDenied.value = true;
-          per = await Geolocator.requestPermission();
-        } else {
-          await Geolocator.getCurrentPosition().then((value) {
-            myCurrentPositionLatitude = value.latitude;
-            myCurrentPositionLongitude = value.longitude;
-            displayLongLocation.value = value.longitude;
-            displayLatLocation.value = value.latitude;
-
-            // savelocationUser(myCurrentPositionLatitude.toString(),
-            //   myCurrentPositionLongitude.toString());
-          });
-
-          isVerificationLocationCompleted.value = true;
-        }
-      } else {
-        MessageAboutLocationServiceEnable.value = true;
-      }
-    });
-  }
-
-  Future askPermissionOfLocation() async {
-    // ignore: unused_local_variable
-    LocationPermission per;
-    per = await Geolocator.requestPermission();
-    checkIsEnableLocationServices();
-  }
-
-  void ConvertIntoTextAddress() async {
-    List<Placemark> placemarks = await placemarkFromCoordinates(
-        displayLatLocation.value, displayLongLocation.value);
-    Placemark placeMark = placemarks[0];
-
-    address.value = placeMark.toString();
-  }
 
 //////////////////////////////////////////////GetMainType.......................
   RxBool isNotEmptyMainType = false.obs;
@@ -191,6 +135,31 @@ class HomeController extends GetxController {
           : isNotEmptyProducrs.value = true;
     } else {
       isNotEmptyProducrs.value = false;
+      print("Error: ${response.statusCode}");
+    }
+  }
+
+  RxBool isNotEmptyProducrsByType = false.obs;
+  var dataProductsListByType = <Products>[].obs;
+
+  RxInt TheType = 1.obs;
+  Future<void> fetchProductsDataByType(String id) async {
+    var response = await http.post(Uri.parse(AppLinksApi.getProductsByType),
+        body: {"prooduct_type": id.toString()});
+    isNotEmptyProducrsByType.value = false;
+    dataProductsListByType.value.clear();
+
+    if (response.statusCode == 200) {
+      List data = json.decode(response.body)["data"];
+
+      dataProductsListByType.value =
+          data.map((e) => Products.fromJson(e)).toList();
+
+      dataProductsListByType.length == 0
+          ? isNotEmptyProducrsByType.value = false
+          : isNotEmptyProducrsByType.value = true;
+    } else {
+      isNotEmptyProducrsByType.value = false;
       print("Error: ${response.statusCode}");
     }
   }
@@ -313,35 +282,6 @@ class HomeController extends GetxController {
     isAddTheUser.value = false;
   }
 
-  /* signUpAccounts(
-    String nameUSerNew,
-    String password,
-    String phone,
-  ) async {
-    var formKeyData = formSignPassword.currentState;
-    if (formKeyData!.validate()) {
-      isLoadingTheScreenSignUp.value = true;
-      Future.delayed(const Duration(seconds: 3), () async {
-        var response = await crud.postRequest(AppLinksApi.signUp, {
-          'user_name': nameUSerNew.toString(),
-          'user_password': password.toString(),
-          'phone': phone.toString(),
-        });
-///////
-        if (response['status'] == "success") {
-          getDataUser(nameUSerNew.toString());
-          isLoadingTheScreenSignUp.value = false;
-          isAddTheUser.value = true;
-        } else {
-          isLoadingTheScreenSignUp.value = false;
-          isErrorAboutAddTheUser.value = true;
-        }
-
-        return response;
-      });
-    }
-  }*/
-
   cleanTheSignUp() {
     isErrorAboutEnterOTP.value = false;
     isLoadingTheScreenSignUp.value = false;
@@ -370,30 +310,6 @@ class HomeController extends GetxController {
   RxBool isTheUserEnterTheRealyDataLogin = false.obs;
   RxBool isErrorAboutLoginTheUser = false.obs;
 
-/*  loginAccounts(String nameUSerNew, String password) async {
-    var formKeyData = formLogin.currentState;
-    if (formKeyData!.validate()) {
-      isLoadingTheScreenLogin.value = true;
-      Future.delayed(const Duration(seconds: 3), () async {
-        var response = await crud.postRequest(AppLinksApi.Login, {
-          'user_name': nameUSerNew.toString(),
-          'user_password': password.toString(),
-        });
-///////
-        if (response['status'] == "success") {
-          getDataUser(nameUSerNew.toString());
-
-          isLoadingTheScreenLogin.value = false;
-          isTheUserEnterTheRealyDataLogin.value = true;
-        } else {
-          isErrorAboutLoginTheUser.value = true;
-        }
-
-        return response;
-      });
-    }
-  }
-*/
   cleanTheLogin() {
     nameLogin = "";
     passwordLogin = "";
@@ -544,25 +460,53 @@ class HomeController extends GetxController {
       appServices.sharedPreferences
           .setInt('isHaveAccount', displayIsHavaAccount.value);
       appServices.sharedPreferences
-          .setDouble('user_longitude', displayLongLocation.value);
-      appServices.sharedPreferences
-          .setDouble('user_latitude', displayLatLocation.value);
+          .setDouble('Long', displayLongLocation.value);
+      appServices.sharedPreferences.setDouble('Lat', displayLatLocation.value);
 
-      await Future.delayed(const Duration(seconds: 5), () async {
-        onInit();
-      });
+      onInit();
     } else {}
     return response;
   }
 
+  //////////////////////////////#############################################################/////////////////////////
+  ///  //////////////////////////////#############################################################/////////////////////////
+  //////////////////////////////#############################################################/////////////////////////
+  //////////////////////////////#############################################################/////////////////////////
+  //////////////////////////////##################################INIT ON###########################/////////////////////////
+  //////////////////////////////#############################################################/////////////////////////
+  //////////////////////////////#############################################################/////////////////////////
+  //////////////////////////////#############################################################/////////////////////////
+  //////////////////////////////#############################################################/////////////////////////
+
+//////////////////////////////////////.............Init On................................////////////////////
+
+  RxBool isGetData = false.obs;
   @override
   void onInit() {
     super.onInit();
-    fetchMainTypeData();
-    fetchOffersData();
-    fetchProductsData();
-    checkAboutUserAccount();
+
+    if (isGetData.value == false) {
+      fetchMainTypeData();
+      fetchProductsDataByType(TheType.value.toString());
+      fetchOffersData();
+      fetchProductsData();
+      checkAboutUserAccount();
+      GetgenerateRandomOrderNumberFromMemory();
+      Future.delayed(const Duration(seconds: 120), () async {
+        isGetData.value = true;
+      });
+    } else {}
   }
+
+  //////////////////////////////#############################################################/////////////////////////
+  /////////////////////////////////#############################################################/////////////////////////
+  //////////////////////////////#############################################################/////////////////////////
+  //////////////////////////////#############################################################/////////////////////////
+  //////////////////////////////#############################################################/////////////////////////
+  //////////////////////////////#############################################################/////////////////////////
+  //////////////////////////////#############################################################/////////////////////////
+  //////////////////////////////#############################################################/////////////////////////
+  //////////////////////////////#############################################################/////////////////////////
 
   Future checkAboutUserAccount() async {
     if (appServices.sharedPreferences.containsKey('isHaveAccount')) {
@@ -576,12 +520,21 @@ class HomeController extends GetxController {
       displayUserPhone.value = appServices.sharedPreferences
           .getString('user_number_phone') as String;
       displayLongLocation.value =
-          appServices.sharedPreferences.getDouble('user_longitude') as double;
+          appServices.sharedPreferences.getDouble('Long') as double;
 
       displayLatLocation.value =
-          appServices.sharedPreferences.getDouble('user_latitude') as double;
+          appServices.sharedPreferences.getDouble('Lat') as double;
 
       getDataUser(displayUserPhone.value.toString());
+
+      await Future.delayed(const Duration(seconds: 7), () async {
+        if (appServices.sharedPreferences.containsKey('IsAddLocation')) {
+          getDataUserLocation();
+        } else {
+          askPermissionOfLocation();
+        }
+      });
+      addTokenUser();
     }
   }
 
@@ -595,22 +548,49 @@ class HomeController extends GetxController {
   //////////////////////////////#############################################################/////////////////////////
   //////////////////////////////#############################################################/////////////////////////
 
-  //////////////////////////////...................The Orders.............................../////////////////////////
+  //////////////////////////////.................. ADD.The Orders.............................../////////////////////////
   var randomNumber = 0;
 
   RxBool MessageAddedIntoList = false.obs;
+
   addIntoOrder(String numberOrder, String total) async {
+    initializeDateFormatting();
+    Intl.defaultLocale = 'ar';
+    DateTime now = DateTime.now();
+    String format = 'hh:mm a';
+    DateFormat formatter = DateFormat(format, 'ar');
+
+    String arabicTime = formatter.format(now);
+
+    ///////////////////////
+    addOrder.value = true;
     var response = await crud.postRequest(AppLinksApi.addIntoOrder, {
       'user_id': displayUserId.value.toString(),
       'order_number': numberOrder.toString(),
       'total': total.toString(),
+      'time_order_user': arabicTime.toString(),
+      'date_order_user':
+          "${DateFormat.MMM().format(DateTime.now()).toString()}-"
+              "${DateFormat.d().format(DateTime.now()).toString()}",
     });
 
     if (response['status'] == "success") {
+      Future.delayed(const Duration(seconds: 3), () async {
+        fetchOrderCart(
+          numberOrder.toString(),
+        );
+      });
+      Future.delayed(const Duration(seconds: 6), () async {
+        addOrder.value = false;
+        countTheOrderStep.value = 2;
+        showThePartOFOrder.value = true;
+        CelarRandomNumber();
+      });
     } else {}
     return response;
   }
 
+  RxInt getIdOfListProducts = 0.obs;
   addIntListProducts(String numberOrder, String total, String productId,
       String quantity) async {
     var response =
@@ -619,25 +599,25 @@ class HomeController extends GetxController {
       'user_id': displayUserId.value.toString(),
       'total': total.toString(),
       'quan': quantity.toString(),
-      'order': numberOrder.toString(),
+      'order_number': numberOrder.toString(),
     });
 
     if (response['status'] == "success") {
+      getIdOfListProducts.value = int.tryParse(
+          response['data'][0]['list_order_product_id'].toString())!;
     } else {}
     return response;
   }
 
   addIntListProductsEtr(
-    String numberOrder,
-    String productId,
-    String extraId,
-  ) async {
+      String numberOrder, String productId, String extraId, String id) async {
     var response =
         await crud.postRequest(AppLinksApi.addIntoOrderListProductsExt, {
       'product_id': productId.toString(),
       'user_id': displayUserId.value.toString(),
       'order_number': numberOrder.toString(),
       'extra_id': extraId.toString(),
+      'list_order_product_id': id.toString()
     });
 
     if (response['status'] == "success") {
@@ -661,6 +641,325 @@ class HomeController extends GetxController {
 
   CelarRandomNumber() {
     randomNumber = 0;
-    appServices.sharedPreferences.setInt('randomNumber', 0);
+    appServices.sharedPreferences.remove('randomNumber');
+  }
+
+  GetgenerateRandomOrderNumberFromMemory() {
+    if (appServices.sharedPreferences.containsKey('randomNumber')) {
+      randomNumber =
+          appServices.sharedPreferences.getInt('randomNumber') as int;
+    } else {}
+  }
+
+  //////////////////////////////#############################################################/////////////////////////
+  ///  //////////////////////////////#############################################################/////////////////////////
+  //////////////////////////////#############################################################/////////////////////////
+  //////////////////////////////#############################################################/////////////////////////
+  //////////////////////////////#############################################################/////////////////////////
+  //////////////////////////////#############################################################/////////////////////////
+  //////////////////////////////#############################################################/////////////////////////
+  //////////////////////////////#############################################################/////////////////////////
+  //////////////////////////////#############################################################/////////////////////////
+
+  //////////////////////////////.................. Get The Orders.............................../////////////////////////
+
+////////////////////Get Products......................//////////
+
+  RxBool showCart = false.obs;
+/////////////////
+
+  ////////////////////////
+
+  RxBool isNotEmptyListOFProductsCart = false.obs;
+  var dataProductsListCart = <ListOfProductsCart>[].obs;
+
+  RxInt totalPrice = RxInt(0); // إضافة متغير جديد لحساب السعر الإجمالي
+
+  Future<void> fetchProductsDataCart() async {
+    var response = await http.post(Uri.parse(AppLinksApi.getListOfProducts),
+        body: {'order_number': randomNumber.toString()});
+
+    //////////////////
+    if (response.statusCode == 200) {
+      var data = json.decode(response.body)["data"];
+      if (data != null) {
+        dataProductsListCart.value = data
+            .map<ListOfProductsCart>((e) => ListOfProductsCart.fromJson(e))
+            .toList();
+        totalPrice.value = dataProductsListCart.fold(
+            0, (sum, item) => sum + (int.parse(item.total)));
+
+        dataProductsListCart.length == 0
+            ? isNotEmptyListOFProductsCart.value = false
+            : isNotEmptyListOFProductsCart.value = true;
+      } else {
+        isNotEmptyListOFProductsCart.value = false;
+        print("Error: ${response.statusCode}");
+      }
+    }
+
+    ///////
+  }
+
+  //////////////Ex List.........................////////
+
+  RxBool isNotEmptyListOFProductsExtCart = false.obs;
+  var dataProductsListExtCart = <ExtrasList>[].obs;
+  Future<void> fetchProductsExtDataCart(String id) async {
+    var response = await http.post(Uri.parse(AppLinksApi.getListOfProductsExt),
+        body: {'list_order_product_id': id.toString()});
+
+    if (response.statusCode == 200) {
+      var data = json.decode(response.body)["data"];
+      //  if (data != null) {
+      // هنا نضيف الشرط
+      dataProductsListExtCart.value =
+          data.map<ExtrasList>((e) => ExtrasList.fromJson(e)).toList();
+
+      dataProductsListExtCart.length == 0
+          ? isNotEmptyListOFProductsExtCart.value = false
+          : isNotEmptyListOFProductsExtCart.value = true;
+      // } else {
+      //  isNotEmptyListOFProductsExtCart.value = false;
+      //  print("Error: ${response.statusCode}");
+      // }
+    }
+  }
+//////////////Order INListCart.........................////////
+
+  RxInt orderNumberFromDataBase = 0.obs;
+  RxInt totoalOrderPriceFromDatabase = 0.obs;
+  RxString dateOfOrderFromDatabase = "".obs;
+  RxString timeOFOrderFromDatabase = "".obs;
+  RxBool isNotEmptyListOFOrderCart = false.obs;
+  var dataOrderListCart = <ListOfOrder>[].obs;
+  Future<void> fetchOrderCart(String OrderNumner) async {
+    var response =
+        await http.post(Uri.parse(AppLinksApi.getListOfOrderCart), body: {
+      'user_id': displayUserId.value.toString(),
+      'order_number': OrderNumner.toString()
+    });
+
+    if (response.statusCode == 200) {
+      var data = json.decode(response.body)["data"];
+      if (data != null) {
+        dataOrderListCart.value =
+            data.map<ListOfOrder>((e) => ListOfOrder.fromJson(e)).toList();
+
+        dataOrderListCart.length == 0
+            ? isNotEmptyListOFOrderCart.value = false
+            : isNotEmptyListOFOrderCart.value = true;
+      } else {
+        isNotEmptyListOFOrderCart.value = false;
+        print("Error: ${response.statusCode}");
+      }
+    }
+  }
+  ////////////////////////
+
+///////////////////
+  RxInt countTheOrderStep = 1.obs;
+
+  RxBool addOrder = false.obs;
+
+  RxBool showThePartOFCart = true.obs;
+  RxBool showThePartOFOrder = false.obs;
+  RxBool showThePartOfInTheWay = false.obs;
+  RxBool showThePartOfClosedOrder = false.obs;
+
+  /////////////////////////////////////////////////////////The OrderList/////////
+//////////////Order List.........................////////
+  RxBool showTheOrderList = false.obs;
+  RxBool isNotEmptyListOFOrder = false.obs;
+  var dataOrderList = <ListOfOrder>[].obs;
+  Future<void> fetchOrder() async {
+    var response = await http.post(Uri.parse(AppLinksApi.getListOfOrder),
+        body: {'user_id': displayUserId.value.toString()});
+
+    if (response.statusCode == 200) {
+      var data = json.decode(response.body)["data"];
+      //  if (data != null) {
+      // هنا نضيف الشرط
+      dataOrderList.value =
+          data.map<ListOfOrder>((e) => ListOfOrder.fromJson(e)).toList();
+
+      dataOrderList.length == 0
+          ? isNotEmptyListOFOrder.value = false
+          : isNotEmptyListOFOrder.value = true;
+    } else {
+      isNotEmptyListOFOrder.value = false;
+
+      // }
+    }
+  }
+
+  viewOrderList() {
+    showTheOrderList.value = true;
+    fetchOrder();
+  }
+
+  ////////////////////////////...........Token and Location.........................//////////////
+  RxString token = "".obs;
+  void addTokenUser() async {
+    FirebaseMessaging.instance.getToken().then((value) async {
+      token.value = value!;
+      var response = await crud.postRequest(AppLinksApi.addTokenUser, {
+        'token': token.value.toString(),
+        'user_id': displayUserId.toString(),
+      });
+
+      return response;
+    });
+  }
+
+  /////////////////////////////////////............... Location........................./////////////
+  RxString address = "لايوجد عنوان".obs;
+  Future getPo() async {
+    bool services;
+    LocationPermission per;
+    services = await Geolocator.isLocationServiceEnabled();
+    if (services == true) {
+      per = await Geolocator.checkPermission();
+      if (per == LocationPermission.denied) {
+        per = await Geolocator.requestPermission();
+      } else {
+        await Geolocator.getCurrentPosition().then((value) {
+          myCurrentPositionLatitude = value.latitude;
+          myCurrentPositionLongitude = value.longitude;
+        });
+      }
+    }
+  }
+
+  Future checkIsEnableLocationServices() async {
+    checkTheLocation.value = true;
+    bool services;
+    LocationPermission per;
+    await Future.delayed(Duration(seconds: 3), () async {
+      services = await Geolocator.isLocationServiceEnabled();
+      if (services == true) {
+        per = await Geolocator.checkPermission();
+        if (per == LocationPermission.denied) {
+          IsrequestPermissionDenied.value = true;
+          per = await Geolocator.requestPermission();
+        } else {
+          await Geolocator.getCurrentPosition().then((value) {
+            myCurrentPositionLatitude = value.latitude;
+            myCurrentPositionLongitude = value.longitude;
+            displayLongLocation.value = value.longitude;
+            displayLatLocation.value = value.latitude;
+
+            savelocationUser(myCurrentPositionLatitude.toString(),
+                myCurrentPositionLongitude.toString());
+          });
+
+          isVerificationLocationCompleted.value = true;
+        }
+      } else {
+        MessageAboutLocationServiceEnable.value = true;
+      }
+    });
+  }
+
+  Future askPermissionOfLocation() async {
+    // ignore: unused_local_variable
+    LocationPermission per;
+    per = await Geolocator.requestPermission();
+    checkIsEnableLocationServices();
+  }
+
+  void ConvertIntoTextAddress() async {
+    List<Placemark> placemarks = await placemarkFromCoordinates(
+        displayLatLocation.value, displayLongLocation.value);
+    Placemark placeMark = placemarks[0];
+
+    address.value = placeMark.toString();
+  }
+
+  Future<void> savelocationUser(
+    String lat,
+    String long,
+  ) async {
+    var response = await crud.postRequest(AppLinksApi.saveLocation, {
+      'user_id': displayUserId.value.toString(),
+      'user_latitude': lat.toString(),
+      'user_longitude': long.toString(),
+    });
+
+    if (response['status'] == "success") {
+      appServices.sharedPreferences.setDouble('Long', double.parse(long));
+      appServices.sharedPreferences.setDouble('Lat', double.parse(lat));
+      appServices.sharedPreferences.setInt('IsAddLocation', 1);
+      getDataUserLocation();
+    } else {}
+
+    return response;
+  }
+
+  getDataUserLocation() async {
+    var response = await crud.postRequest(AppLinksApi.getUserDataLocation, {
+      'user_id': displayUserId.value.toString(),
+    });
+
+    if (response['status'] == "success") {
+      displayLatLocation.value =
+          double.parse(response['data'][0]['user_latitude'].toString());
+      displayLongLocation.value =
+          double.parse(response['data'][0]['user_longitude'].toString());
+      appServices.sharedPreferences.setDouble('Long', displayLatLocation.value);
+      appServices.sharedPreferences.setDouble('Lat', displayLongLocation.value);
+
+      await Future.delayed(const Duration(seconds: 3), () async {
+        ConvertIntoTextAddress();
+        onInit();
+      });
+    } else {}
+    return response;
+  }
+
+  ////////////Get Products.. By Searching...................///////////
+  TextEditingController searchingControllr = TextEditingController();
+  String searching = "";
+  RxBool isSearching = false.obs;
+
+  makeSearchingReady(String searching) {
+    if (isSearching.value == true) {
+      makeSearchingClear();
+    } else {
+      fetchProductsDataSearching(searching.toString());
+      isSearching.value = true;
+    }
+  }
+
+  makeSearchingClear() {
+    searchingControllr.clear();
+    searching = "";
+    isSearching.value = false;
+    isNotEmptyProducrsSearching.value = false;
+    dataProductsListSearching.clear();
+  }
+
+  RxBool isNotEmptyProducrsSearching = false.obs;
+  var dataProductsListSearching = <Products>[].obs;
+
+  Future<void> fetchProductsDataSearching(String searching) async {
+    var response =
+        await http.post(Uri.parse(AppLinksApi.getProductsBySearching), body: {
+      'search': searching.toString(),
+    });
+
+    if (response.statusCode == 200) {
+      List data = json.decode(response.body)["data"];
+
+      dataProductsListSearching.value =
+          data.map((e) => Products.fromJson(e)).toList();
+
+      dataProductsListSearching.length == 0
+          ? isNotEmptyProducrsSearching.value = false
+          : isNotEmptyProducrsSearching.value = true;
+    } else {
+      isNotEmptyProducrsSearching.value = false;
+      print("Error: ${response.statusCode}");
+    }
   }
 }

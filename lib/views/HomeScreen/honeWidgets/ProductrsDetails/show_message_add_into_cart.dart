@@ -90,29 +90,6 @@ class AddIntoListCart extends StatelessWidget {
                                   width: 100.w,
                                   height: 40.h,
                                   decoration: BoxDecoration(
-                                      color: AppColors.redColor,
-                                      borderRadius: BorderRadius.circular(5)),
-                                  child: Text(
-                                    "مشاهدة السلة",
-                                    style: TextStyle(
-                                        fontSize: 12.sp,
-                                        fontFamily: AppTextStyles.Almarai,
-                                        color: AppColors.whiteColor),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Align(
-                              child: InkWell(
-                                onTap: () {
-                                  controller.BackToHome();
-                                },
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  width: 100.w,
-                                  height: 40.h,
-                                  decoration: BoxDecoration(
                                       color: AppColors.yellowColor,
                                       borderRadius: BorderRadius.circular(5)),
                                   child: Text(
@@ -126,7 +103,32 @@ class AddIntoListCart extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                            )
+                            ),
+                            Align(
+                              child: InkWell(
+                                onTap: () {
+                                  controller.BackToHome();
+                                  controller.fetchProductsDataCart();
+                                  controller.showCart.value = true;
+                                },
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  width: 100.w,
+                                  height: 40.h,
+                                  decoration: BoxDecoration(
+                                      color: AppColors.redColor,
+                                      borderRadius: BorderRadius.circular(5)),
+                                  child: Text(
+                                    "مشاهدة السلة",
+                                    style: TextStyle(
+                                        fontSize: 12.sp,
+                                        fontFamily: AppTextStyles.Almarai,
+                                        color: AppColors.whiteColor),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                            ),
                           ],
                         )
                       ]))))
