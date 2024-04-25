@@ -7,7 +7,7 @@ import '../../core/constant/app_text_styles.dart';
 import '../../core/constant/appcolors.dart';
 import '../../core/constant/images_path.dart';
 import '../../customWidgets/custom_padding.dart';
-import '../Auth/number_phone.dart';
+import '../Auth/login/number_phone_login.dart';
 import '../HomeScreen/home_screen.dart';
 
 class WelcomeScreen extends StatelessWidget {
@@ -26,7 +26,7 @@ class WelcomeScreen extends StatelessWidget {
               height: 80.h,
             ),
             Text(
-              "1-مرحبًا في تطبيق سموي".tr,
+              "274-مرحبًا بك في تطبيق سموي".tr,
               style: TextStyle(
                   fontFamily: AppTextStyles.Almarai,
                   color: AppColors.blackColor,
@@ -40,7 +40,7 @@ class WelcomeScreen extends StatelessWidget {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 50.w),
               child: Text(
-                "2-قم رجاءًا بإختيار مسار محدد للمتابعة".tr,
+                "275-يوصلك ساخن على الاخر وباجمل مذاق".tr,
                 style: TextStyle(
                     fontFamily: AppTextStyles.Almarai,
                     color: AppColors.blackColor,
@@ -52,29 +52,44 @@ class WelcomeScreen extends StatelessWidget {
             Align(
               alignment: Alignment.center,
               child: PaddingCustom(
-                theTop: 20,
+                theTop: 00,
                 child: Lottie.asset(
-                  "${ImagesPath.success}",
+                  "${ImagesPath.Welcome}",
                 ),
               ),
             ),
             SizedBox(
               height: 59.h,
             ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 50.w),
+              child: Text(
+                "276-قم بإختيار أحد المسارات التالية".tr,
+                style: TextStyle(
+                    fontFamily: AppTextStyles.Almarai,
+                    color: AppColors.blackColor,
+                    fontSize: 15.sp,
+                    fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            SizedBox(
+              height: 19.h,
+            ),
             InkWell(
               onTap: () {
-                Get.to(NumberPhone());
+                Get.to(NumberPhoneLogin());
               },
               child: Container(
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: AppColors.balckColorTypeFour,
+                  color: AppColors.redColor,
                   borderRadius: BorderRadius.circular(5),
                 ),
                 width: 220.w,
                 height: 35.h,
                 child: Text(
-                  "3-تسجيل الدخول".tr,
+                  "277-تسجيل الدخول".tr,
                   style: TextStyle(
                       fontFamily: AppTextStyles.Almarai,
                       color: AppColors.whiteColor,
@@ -100,7 +115,7 @@ class WelcomeScreen extends StatelessWidget {
                 width: 220.w,
                 height: 35.h,
                 child: Text(
-                  "4-المتابعة كزائر".tr,
+                  "278-المتابعة كزائر".tr,
                   style: TextStyle(
                       fontFamily: AppTextStyles.Almarai,
                       color: AppColors.balckColorTypeFour,

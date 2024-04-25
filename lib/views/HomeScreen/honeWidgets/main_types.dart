@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -36,11 +35,6 @@ class MainTypes extends StatelessWidget {
                             onTap: () {
                               THENEWcontroller.isNotEmptyProducrsByType.value =
                                   false;
-                              THENEWcontroller.dataProductsListByType.value
-                                  .clear();
-                              THENEWcontroller.TheType.value = int.parse(
-                                  THENEWcontroller.dataList[index].id
-                                      .toString());
 
                               THENEWcontroller.fetchProductsDataByType(
                                   THENEWcontroller.dataList[index].id
@@ -120,7 +114,7 @@ class MainTypes extends StatelessWidget {
                                     highlightColor: AppColors.whiteColor,
                                     enabled: true,
                                     child: TextCustom(
-                                      theText: "يتم التحميل",
+                                      theText: "18-يتم التحميل".tr,
                                       fontColor: AppColors.whiteColor,
                                       fontFamily: AppTextStyles.Marhey,
                                       fontSizeWidth: 15,

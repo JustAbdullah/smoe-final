@@ -4,25 +4,25 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import 'package:lottie/lottie.dart';
+import 'package:smoe_app_final/views/WelcomeScreen/welcome_screen.dart';
 
-import '../../controllers/home_controller.dart';
-import '../../core/constant/app_text_styles.dart';
-import '../../core/constant/appcolors.dart';
-import '../../core/constant/images_path.dart';
-import '../../customWidgets/custom_container.dart';
-import '../../customWidgets/custom_padding.dart';
-import '../../customWidgets/custom_text.dart';
-import '../../customWidgets/custome_textfiled.dart';
-import 'number_phone.dart';
+import '../../../controllers/home_controller.dart';
+import '../../../core/constant/app_text_styles.dart';
+import '../../../core/constant/appcolors.dart';
+import '../../../core/constant/images_path.dart';
+import '../../../customWidgets/custom_container.dart';
+import '../../../customWidgets/custom_padding.dart';
+import '../../../customWidgets/custom_text.dart';
+import '../../../customWidgets/custome_textfiled.dart';
 
-class CodeNumber extends StatelessWidget {
-  const CodeNumber({super.key});
+class CodeNumberTheLogin extends StatelessWidget {
+  const CodeNumberTheLogin({super.key});
 
   @override
   Widget build(BuildContext context) {
     HomeController homeController = Get.put(HomeController());
     return Scaffold(
-      backgroundColor: AppColors.whiteColorTypeOne,
+      backgroundColor: AppColors.whiteColor,
       body: SafeArea(
           child: Stack(
         children: [
@@ -36,38 +36,21 @@ class CodeNumber extends StatelessWidget {
                 Align(
                   alignment: Alignment.topCenter,
                   child: TextCustom(
-                      theText: "الإنضمام للتطبيق",
+                      fontWeight: FontWeight.bold,
+                      theText: "225-تسجيل الدخول- التزامن".tr,
                       fontSizeWidth: 23,
                       fontFamily: AppTextStyles.Almarai,
                       fontColor: AppColors.theAppColorYellow),
                 ),
                 SizedBox(
-                  height: 40.h,
+                  height: 70.h,
                 ),
                 Align(
                   alignment: Alignment.topCenter,
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 50.w),
                     child: Text(
-                      " عزيزينا ${homeController.nameSignUp.toString()} نشكرك على طلب الإنضمام الرجاء إكمال التالي",
-                      style: TextStyle(
-                          height: 1.5.h,
-                          fontSize: 15.5.sp,
-                          fontFamily: AppTextStyles.Almarai,
-                          color: AppColors.balckColorTypeThree),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 10.h,
-                ),
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 50.w),
-                    child: Text(
-                      " رقم الهاتف المُدخل: ${homeController.theNumber.value.toString()} ",
+                      "رقم الهاتف المُدخل:${homeController.theNumber.value.toString()} ",
                       style: TextStyle(
                           height: 1.5.h,
                           fontSize: 15.5.sp,
@@ -85,24 +68,24 @@ class CodeNumber extends StatelessWidget {
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 50.w),
                     child: Text(
-                      "عليك إدخال كود التحقق المرسل إلى رقمك بالأعلى..",
+                      "227-عليك إدخال كود التحقق المرسل إلى رقمك بالأعلى..".tr,
                       style: TextStyle(
                           height: 1.5.h,
-                          fontSize: 17.5.sp,
+                          fontSize: 17.sp,
                           fontFamily: AppTextStyles.Almarai,
-                          color: AppColors.balckColorTypeThree),
+                          color: AppColors.balckColorTypeFour.withOpacity(0.5)),
                       textAlign: TextAlign.center,
                     ),
                   ),
                 ),
                 SizedBox(
-                  height: 30.h,
+                  height: 50.h,
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 70.w),
                   child: TextFormFiledCustom(
-                    labelData: "كود التحقق",
-                    hintData: "لطفًا أدخل كود التحقق",
+                    labelData: "228-كود التحقق".tr,
+                    hintData: "229-لطفًا أدخل كود التحقق".tr,
                     iconData: Icons.copy_rounded,
                     controllerData: homeController.TheCodeTextController,
                     value: (value) {
@@ -130,10 +113,7 @@ class CodeNumber extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  height: 20.h,
-                ),
-                SizedBox(
-                  height: 30.h,
+                  height: 100.h,
                 ),
                 InkWell(
                   onTap: () {
@@ -147,10 +127,10 @@ class CodeNumber extends StatelessWidget {
                     widthContainer: 200,
                     heigthContainer: 40,
                     child: TextCustom(
-                        theText: "المتابعة",
+                        theText: "230-المتابعة".tr,
                         fontSizeWidth: 16,
                         fontFamily: AppTextStyles.Almarai,
-                        fontColor: AppColors.whiteColor),
+                        fontColor: AppColors.balckColorTypeFour),
                   ),
                 ),
               ]),
@@ -183,7 +163,7 @@ class CodeNumber extends StatelessWidget {
                       children: [
                         Lottie.asset(ImagesPath.loadingAnimation, width: 140.w),
                         Text(
-                          "يتم التحقق الان",
+                          "231-يتم التحقق الان".tr,
                           style: TextStyle(
                             color: AppColors.whiteColor,
                             fontFamily: AppTextStyles.Almarai,
@@ -224,7 +204,8 @@ class CodeNumber extends StatelessWidget {
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 20.w),
                             child: Text(
-                              "لقد اتممت التحقق بنجاح ,,يمكنك الان من إدخال الاسم من أجل إكمال إنشاء الحساب ,شُكرا على صبرك",
+                              "232-لقد اتممت التحقق بنجاح ,,يمكنك الان من التوجة إلى الرئيسية ,شُكرا على صبرك"
+                                  .tr,
                               style: TextStyle(
                                 height: 1.7.h,
                                 color: AppColors.whiteColor,
@@ -239,7 +220,8 @@ class CodeNumber extends StatelessWidget {
                           ),
                           InkWell(
                             onTap: () {
-                              homeController.goToHomeLoginSignUp();
+                              homeController.goToHomeLogin(
+                                  homeController.theNumber.value);
                             },
                             child: ContainerCustom(
                               widthContainer: 200.w,
@@ -247,7 +229,7 @@ class CodeNumber extends StatelessWidget {
                               colorContainer: AppColors.theAppColorYellow,
                               child: Center(
                                 child: TextCustom(
-                                    theText: "التوجة الان",
+                                    theText: "233-التوجة الان".tr,
                                     fontSizeWidth: 20,
                                     fontFamily: AppTextStyles.Almarai,
                                     fontColor: AppColors.balckColorTypeThree),
@@ -289,7 +271,8 @@ class CodeNumber extends StatelessWidget {
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 20.w),
                             child: Text(
-                              "عزيزي المستخدم هناك إشكالية,,الرجاء  المحاولة مجددًا لاحقًا",
+                              "234-عزيزي المستخدم هناك إشكالية,,الرجاء المحاولة مجددًا لاحقًا"
+                                  .tr,
                               style: TextStyle(
                                 height: 1.7.h,
                                 color: AppColors.whiteColor,
@@ -306,7 +289,7 @@ class CodeNumber extends StatelessWidget {
                               onTap: () {
                                 homeController.cleanTheSignUp();
 
-                                Get.to(NumberPhone());
+                                Get.to(WelcomeScreen());
                               },
                               child: ContainerCustom(
                                 widthContainer: 200.w,
@@ -314,7 +297,7 @@ class CodeNumber extends StatelessWidget {
                                 colorContainer: AppColors.theAppColorYellow,
                                 child: Center(
                                   child: TextCustom(
-                                      theText: "الاخفاء",
+                                      theText: "235-الاخفاء".tr,
                                       fontSizeWidth: 20,
                                       fontFamily: AppTextStyles.Almarai,
                                       fontColor: AppColors.balckColorTypeThree),

@@ -1,8 +1,6 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:lottie/lottie.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../controllers/home_controller.dart';
@@ -23,18 +21,21 @@ class AllProductd extends StatelessWidget {
     HomeController homeController = Get.put(HomeController());
     return Obx(() {
       return homeController.isNotEmptyProducrs.value == true
-          ? SizedBox(
-              width: MediaQuery.sizeOf(context).width,
-              child: Expanded(
-                child: ListView.builder(
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: homeController.dataProductsList.length,
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10.w),
-                        child: PaddingCustom(
-                          theBottom: 10,
+          ? LimitedBox(
+              maxHeight: 400.h,
+              child: ListView.builder(
+                  physics: BouncingScrollPhysics(),
+                  itemCount: homeController.dataProductsList.length,
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10.w),
+                      child: PaddingCustom(
+                        theBottom: 10,
+                        child: InkWell(
+                          onTap: () {
+                            homeController.goToDetailsProducts(index);
+                          },
                           child: ContainerCustom(
                             theBorderRadius: 5,
                             colorContainer: AppColors.whiteColor,
@@ -79,7 +80,7 @@ class AllProductd extends StatelessWidget {
                                             width: 4.w,
                                           ),
                                           TextCustom(
-                                            theText: "ريال",
+                                            theText: "17-ريال".tr,
                                             fontColor:
                                                 AppColors.balckColorTypeFour,
                                             fontFamily: AppTextStyles.Marhey,
@@ -148,9 +149,9 @@ class AllProductd extends StatelessWidget {
                             ),
                           ),
                         ),
-                      );
-                    }),
-              ),
+                      ),
+                    );
+                  }),
             )
           : ListView.builder(
               scrollDirection: Axis.vertical,
@@ -202,7 +203,7 @@ class AllProductd extends StatelessWidget {
                                               width: 4.w,
                                             ),
                                             TextCustom(
-                                              theText: "يتم التحميل",
+                                              theText: "18-يتم التحميل",
                                               fontColor: AppColors.redColor,
                                               fontFamily: AppTextStyles.Almarai,
                                               fontSizeWidth: 16,
@@ -224,7 +225,7 @@ class AllProductd extends StatelessWidget {
                                       child: PaddingCustom(
                                         theTop: 30,
                                         child: TextCustom(
-                                          theText: "يتم التحميل",
+                                          theText: "18-يتم التحميل".tr,
                                           fontColor: AppColors.blackColor,
                                           fontFamily: AppTextStyles.Almarai,
                                           fontSizeWidth: 18,
@@ -238,7 +239,7 @@ class AllProductd extends StatelessWidget {
                                       child: PaddingCustom(
                                         theTop: 15,
                                         child: Text(
-                                          "يتم التحميل",
+                                          "18-يتم التحميل",
                                           maxLines: 4,
                                           style: TextStyle(
                                               fontSize: 14.sp,
@@ -272,7 +273,7 @@ class AllProductd extends StatelessWidget {
                                               padding: EdgeInsets.symmetric(
                                                   horizontal: 8.h),
                                               child: Text(
-                                                "يتم التحميل",
+                                                "18-يتم التحميل",
                                                 style: TextStyle(
                                                   color: AppColors.blackColor,
                                                   fontFamily:

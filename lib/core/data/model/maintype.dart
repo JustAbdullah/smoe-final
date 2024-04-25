@@ -1,3 +1,8 @@
+import '../../localization/changelanguage.dart';
+import 'package:get/get.dart';
+
+ChangeLanguageToLocale homeController = Get.put(ChangeLanguageToLocale());
+
 class maintype {
   var id;
   var name;
@@ -8,7 +13,9 @@ class maintype {
   factory maintype.fromJson(Map<String, dynamic> json) {
     return maintype(
       id: json['type_id'] ?? 1,
-      name: json['type_name_ar'] ?? 'Default Title',
+      name: homeController.isChange.value == true
+          ? json['type_name_ar']
+          : json['type_name_en'] ?? 'Default Title',
       img: json['type_image'] ?? 'Default image',
     );
   }

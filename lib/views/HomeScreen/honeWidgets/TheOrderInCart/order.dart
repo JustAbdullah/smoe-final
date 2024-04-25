@@ -3,14 +3,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:smoe_app_final/customWidgets/custom_padding.dart';
-import 'package:smoe_app_final/views/HomeScreen/honeWidgets/TheOrderInCart/PartOfCart/cart.dart';
-import 'package:smoe_app_final/views/HomeScreen/honeWidgets/ProductrsDetails/extras.dart';
 
 import '../../../../controllers/home_controller.dart';
 import '../../../../core/constant/app_text_styles.dart';
 import '../../../../core/constant/appcolors.dart';
 import '../../../../core/constant/images_path.dart';
-import '../../../../customWidgets/custom_cachednetworkimage.dart';
 import '../../../../customWidgets/custom_text.dart';
 import 'PartOfCart/cart_page.dart';
 import 'PartOfOrder/the_part_order.dart';
@@ -78,7 +75,7 @@ class Order extends StatelessWidget {
                               child: Align(
                                 alignment: Alignment.topCenter,
                                 child: TextCustom(
-                                    theText: "التفاصيل",
+                                    theText: "65-التفاصيل".tr,
                                     fontSizeWidth: 20,
                                     fontFamily: AppTextStyles.Almarai,
                                     fontColor: AppColors.balckColorTypeFour),
@@ -125,7 +122,7 @@ class Order extends StatelessWidget {
                                           ),
                                         ),
                                         Text(
-                                          "السلة".tr,
+                                          "66-السلة".tr,
                                           style: TextStyle(
                                               fontFamily: AppTextStyles.Almarai,
                                               color:
@@ -176,7 +173,7 @@ class Order extends StatelessWidget {
                                           ),
                                         ),
                                         Text(
-                                          "الطلبية".tr,
+                                          "67-الطلبية".tr,
                                           style: TextStyle(
                                               fontFamily: AppTextStyles.Almarai,
                                               color:
@@ -227,7 +224,7 @@ class Order extends StatelessWidget {
                                           ),
                                         ),
                                         Text(
-                                          "في الطريق".tr,
+                                          "68-في الطريق".tr,
                                           style: TextStyle(
                                               fontFamily: AppTextStyles.Almarai,
                                               color:
@@ -278,7 +275,7 @@ class Order extends StatelessWidget {
                                           ),
                                         ),
                                         Text(
-                                          "التسليم".tr,
+                                          "69-التسليم".tr,
                                           style: TextStyle(
                                               fontFamily: AppTextStyles.Almarai,
                                               color:
@@ -300,10 +297,9 @@ class Order extends StatelessWidget {
                           SizedBox(
                             width: MediaQuery.of(context).size.width,
                             height: 600.h,
-                            child: Expanded(
-                                child: controller.countTheOrderStep.value == 1
-                                    ? CartPage()
-                                    : OrderPage()),
+                            child: controller.countTheOrderStep.value == 1
+                                ? CartPage()
+                                : OrderPage(),
                           ),
                         ]),
                       ),
@@ -318,7 +314,10 @@ class Order extends StatelessWidget {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   InkWell(
-                                    onTap: () {},
+                                    onTap: () {
+                                      controller.deleteAllCart(
+                                          controller.randomNumber.toString());
+                                    },
                                     child: Container(
                                         alignment: Alignment.center,
                                         height: 30.h,
@@ -330,7 +329,7 @@ class Order extends StatelessWidget {
                                           padding: EdgeInsets.symmetric(
                                               horizontal: 20.w),
                                           child: Text(
-                                            "حذف السلة".tr,
+                                            "70-حذف السلة".tr,
                                             style: TextStyle(
                                                 height: 1.3.h,
                                                 fontSize: 17,
@@ -359,7 +358,7 @@ class Order extends StatelessWidget {
                                           padding: EdgeInsets.symmetric(
                                               horizontal: 20.w),
                                           child: Text(
-                                            "إنشاء الطلبية".tr,
+                                            "71-إنشاء الطلبية".tr,
                                             style: TextStyle(
                                                 height: 1.3.h,
                                                 fontSize: 17,
@@ -403,7 +402,8 @@ class Order extends StatelessWidget {
                                   height: 10.h,
                                 ),
                                 Text(
-                                  "الرجاء الإنتظار يتم إضافة الطلبية الان".tr,
+                                  "72-الرجاء الإنتظار يتم إضافة الطلبية الان"
+                                      .tr,
                                   style: TextStyle(
                                       height: 1.3.h,
                                       fontSize: 15,

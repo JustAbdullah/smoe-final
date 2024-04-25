@@ -143,7 +143,7 @@ class SettingsMenu extends StatelessWidget {
                                 child: Row(
                                   children: [
                                     Image.asset(
-                                      ImagesPath.bag,
+                                      ImagesPath.listNew,
                                       width: 20.w,
                                     ),
                                     SizedBox(
@@ -322,7 +322,7 @@ class SettingsMenu extends StatelessWidget {
                                     width: 10.w,
                                   ),
                                   Text(
-                                    "168-اللغة".tr,
+                                    "17-اللغة".tr,
                                     style: TextStyle(
                                         height: 1.3.h,
                                         fontSize: 15,

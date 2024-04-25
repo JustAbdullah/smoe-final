@@ -6,14 +6,14 @@ import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
 import 'package:lottie/lottie.dart';
 
-import '../../controllers/home_controller.dart';
-import '../../core/constant/app_text_styles.dart';
-import '../../core/constant/appcolors.dart';
-import '../../core/constant/images_path.dart';
-import '../../customWidgets/custom_container.dart';
-import '../../customWidgets/custom_padding.dart';
-import '../../customWidgets/custom_text.dart';
-import '../../customWidgets/custome_textfiled.dart';
+import '../../../controllers/home_controller.dart';
+import '../../../core/constant/app_text_styles.dart';
+import '../../../core/constant/appcolors.dart';
+import '../../../core/constant/images_path.dart';
+import '../../../customWidgets/custom_container.dart';
+import '../../../customWidgets/custom_padding.dart';
+import '../../../customWidgets/custom_text.dart';
+import '../login/number_phone_login.dart';
 import 'otp_number.dart';
 
 class NumberPhone extends StatelessWidget {
@@ -23,7 +23,7 @@ class NumberPhone extends StatelessWidget {
   Widget build(BuildContext context) {
     HomeController homeController = Get.put(HomeController());
     return Scaffold(
-      backgroundColor: AppColors.whiteColorTypeOne,
+      backgroundColor: AppColors.whiteColor,
       body: SafeArea(
           child: Stack(
         children: [
@@ -37,10 +37,11 @@ class NumberPhone extends StatelessWidget {
                 Align(
                   alignment: Alignment.topCenter,
                   child: TextCustom(
-                      theText: "الإنضمام للتطبيق",
+                      fontWeight: FontWeight.bold,
+                      theText: "248-الإنضمام للتطبيق".tr,
                       fontSizeWidth: 23,
                       fontFamily: AppTextStyles.Almarai,
-                      fontColor: AppColors.blackColorsTypeOne),
+                      fontColor: AppColors.theAppColorYellow),
                 ),
                 SizedBox(
                   height: 20.h,
@@ -50,30 +51,34 @@ class NumberPhone extends StatelessWidget {
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 50.w),
                     child: Text(
-                      "يُسرنا إختيارك ورغبتك للانضمام لتطبيقنا للتمتع بمختلف المزايا المُقدمة لك",
+                      "254-يُسرنا إختيارك ورغبتك للانضمام لتطبيقنا للتمتع بمختلف المزايا المُقدمة لك"
+                          .tr,
                       style: TextStyle(
                           height: 1.5.h,
                           fontSize: 15.5.sp,
                           fontFamily: AppTextStyles.Almarai,
-                          color: AppColors.balckColorTypeThree),
+                          color:
+                              AppColors.balckColorTypeThree.withOpacity(0.5)),
                       textAlign: TextAlign.center,
                     ),
                   ),
                 ),
                 SizedBox(
-                  height: 20.h,
+                  height: 60.h,
                 ),
                 Align(
                   alignment: Alignment.topCenter,
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 50.w),
                     child: Text(
-                      "رجاءًا قم بإدخال رقم الهاتف في الحقل التالي  للتقدم",
+                      "238-رجاءًا قم بإدخال رقم الهاتف في الحقل التالي  للتقدم"
+                          .tr,
                       style: TextStyle(
                           height: 1.5.h,
-                          fontSize: 17.5.sp,
+                          fontSize: 17.sp,
                           fontFamily: AppTextStyles.Almarai,
-                          color: AppColors.balckColorTypeThree),
+                          color:
+                              AppColors.balckColorTypeThree.withOpacity(0.6)),
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -137,7 +142,7 @@ class NumberPhone extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          "بالفعل قد أكملت عملية الإنضمام؟",
+                          "255-بالفعل لديك حساب؟".tr,
                           style: TextStyle(
                               height: 1.5.h,
                               fontSize: 13.5.sp,
@@ -150,10 +155,10 @@ class NumberPhone extends StatelessWidget {
                         ),
                         InkWell(
                           onTap: () {
-                            Get.offAll(const CodeNumber());
+                            Get.offAll(const NumberPhoneLogin());
                           },
                           child: Text(
-                            "قم بالتزامن الان",
+                            "256-قم بالتزامن الان".tr,
                             style: TextStyle(
                                 height: 1.5.h,
                                 fontSize: 13.5.sp,
@@ -179,17 +184,18 @@ class NumberPhone extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  height: 30.h,
+                  height: 10.h,
                 ),
                 Align(
                   alignment: Alignment.topCenter,
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 40.w),
                     child: Text(
-                      "عند الضغط على الزر سيتم التحقق من  رقم الهاتف  قبل إكمال عملية الإنضمام,,رجاءًا تحلى بالصبر",
+                      "257-عند الضغط على الزر سيتم التحقق من  رقم الهاتف  قبل إكمال عملية الإنضمام,,رجاءًا تحلى بالصبر"
+                          .tr,
                       style: TextStyle(
                           height: 1.5.h,
-                          fontSize: 15.5.sp,
+                          fontSize: 12.5.sp,
                           fontFamily: AppTextStyles.Almarai,
                           color:
                               AppColors.balckColorTypeThree.withOpacity(0.5)),
@@ -198,7 +204,7 @@ class NumberPhone extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  height: 60.h,
+                  height: 100.h,
                 ),
                 InkWell(
                   onTap: () {
@@ -207,52 +213,15 @@ class NumberPhone extends StatelessWidget {
                   },
                   child: ContainerCustom(
                     colorContainer: AppColors.theAppColorYellow,
-                    widthContainer: 200,
+                    widthContainer: 260,
                     heigthContainer: 40,
                     child: TextCustom(
-                        theText: "التحقق الان",
+                        theText: "258-التحقق الان".tr,
                         fontSizeWidth: 16,
                         fontFamily: AppTextStyles.Almarai,
-                        fontColor: AppColors.whiteColor),
+                        fontColor: AppColors.balckColorTypeFour),
                   ),
                 ),
-                SizedBox(
-                  height: 20.h,
-                ),
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 45.w),
-                    child: Text(
-                      "في حال إنضمامك للتطبيق  فإنك توافق على شروط واحكام منصة تطبيق سموي",
-                      style: TextStyle(
-                          height: 1.5.h,
-                          fontSize: 14.5.sp,
-                          fontFamily: AppTextStyles.Almarai,
-                          color: AppColors.redColor),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 15.h,
-                ),
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 45.w),
-                    child: Text(
-                      "قراءة الشروط والأحكام",
-                      style: TextStyle(
-                          height: 1.5.h,
-                          fontSize: 14.5.sp,
-                          fontFamily: AppTextStyles.Almarai,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.theAppColorYellow),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                )
               ]),
             ),
           ),
@@ -283,7 +252,7 @@ class NumberPhone extends StatelessWidget {
                       children: [
                         Lottie.asset(ImagesPath.loadingAnimation, width: 190.w),
                         Text(
-                          "انتظر قليلاً يتم التحقق الان",
+                          "259-انتظر قليلاً يتم التحقق الان".tr,
                           style: TextStyle(
                             color: AppColors.whiteColor,
                             fontFamily: AppTextStyles.Almarai,
@@ -324,7 +293,8 @@ class NumberPhone extends StatelessWidget {
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 20.w),
                             child: Text(
-                              "تم بنجاح التحقق انقر للتقدم وإكمال عملية الإنضمام",
+                              "260-تم بنجاح التحقق انقر للتقدم وإكمال عملية الإنضمام"
+                                  .tr,
                               style: TextStyle(
                                 height: 1.7.h,
                                 color: AppColors.whiteColor,
@@ -348,7 +318,7 @@ class NumberPhone extends StatelessWidget {
                               colorContainer: AppColors.theAppColorYellow,
                               child: Center(
                                 child: TextCustom(
-                                    theText: "التوجة الان",
+                                    theText: "261-التوجة الان".tr,
                                     fontSizeWidth: 20,
                                     fontFamily: AppTextStyles.Almarai,
                                     fontColor: AppColors.balckColorTypeThree),
@@ -393,7 +363,8 @@ class NumberPhone extends StatelessWidget {
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 20.w),
                             child: Text(
-                              "عزيزي المستخدم هناك إشكالية,,الرجاء إعادة المحاولة مرة أخرى",
+                              "262-عزيزي المستخدم هناك إشكالية,,الرجاء إعادة المحاولة مرة أخرى"
+                                  .tr,
                               style: TextStyle(
                                 height: 1.7.h,
                                 color: AppColors.whiteColor,
@@ -416,7 +387,7 @@ class NumberPhone extends StatelessWidget {
                                 colorContainer: AppColors.theAppColorYellow,
                                 child: Center(
                                   child: TextCustom(
-                                      theText: "الاخفاء",
+                                      theText: "263-الاخفاء".tr,
                                       fontSizeWidth: 20,
                                       fontFamily: AppTextStyles.Almarai,
                                       fontColor: AppColors.balckColorTypeThree),

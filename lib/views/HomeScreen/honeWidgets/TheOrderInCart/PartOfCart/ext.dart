@@ -7,7 +7,6 @@ import '../../../../../controllers/home_controller.dart';
 import '../../../../../core/constant/app_text_styles.dart';
 import '../../../../../core/constant/appcolors.dart';
 import '../../../../../core/constant/images_path.dart';
-import '../../../../../customWidgets/custom_cachednetworkimage.dart';
 import '../../../../../customWidgets/custom_container.dart';
 import '../../../../../customWidgets/custom_container_api.dart';
 import '../../../../../customWidgets/custom_padding.dart';

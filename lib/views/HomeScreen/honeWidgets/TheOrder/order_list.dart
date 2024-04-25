@@ -2,14 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:smoe_app_final/customWidgets/custom_padding.dart';
-import 'package:smoe_app_final/views/HomeScreen/honeWidgets/ProductrsDetails/extras.dart';
 
 import '../../../../controllers/home_controller.dart';
 import '../../../../core/constant/app_text_styles.dart';
 import '../../../../core/constant/appcolors.dart';
-import '../../../../customWidgets/custom_cachednetworkimage.dart';
-import '../../../../customWidgets/custom_text.dart';
+
 import 'order_page.dart';
+import 'order_page_offers.dart';
 
 class TheOrderListUser extends StatelessWidget {
   const TheOrderListUser({super.key});
@@ -23,6 +22,7 @@ class TheOrderListUser extends StatelessWidget {
               Align(
                 alignment: Alignment.center,
                 child: Container(
+                  alignment: Alignment.topCenter,
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height,
                   color: Colors.white,
@@ -66,7 +66,7 @@ class TheOrderListUser extends StatelessWidget {
                                 color: AppColors.yellowColor,
                                 borderRadius: BorderRadius.circular(10)),
                             child: Text(
-                              "قائمة الطلبيات",
+                              "73-قائمة الطلبيات".tr,
                               style: TextStyle(
                                   fontSize: 16.sp,
                                   fontWeight: FontWeight.w600,
@@ -78,9 +78,71 @@ class TheOrderListUser extends StatelessWidget {
                         ),
                       ),
                       SizedBox(
-                        height: 50.h,
+                        height: 20.h,
                       ),
-                      OrderListPage()
+                      PaddingCustom(
+                        theTop: 10.h,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 10.w),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  controller.whatisTheOrder.value = false;
+                                },
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  width: 140.w,
+                                  height: 40.h,
+                                  decoration: BoxDecoration(
+                                      color: controller.whatisTheOrder.value
+                                          ? AppColors.balckColorTypeFour
+                                          : AppColors.yellowColor,
+                                      borderRadius: BorderRadius.circular(3)),
+                                  child: Text(
+                                    "74-طلبيات المنتجات".tr,
+                                    style: TextStyle(
+                                        fontSize: 12.sp,
+                                        fontFamily: AppTextStyles.Almarai,
+                                        color: AppColors.whiteColor),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                              InkWell(
+                                onTap: () {
+                                  controller.whatisTheOrder.value = true;
+                                },
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  width: 140.w,
+                                  height: 40.h,
+                                  decoration: BoxDecoration(
+                                      color: controller.whatisTheOrder.value
+                                          ? AppColors.yellowColor
+                                          : AppColors.balckColorTypeFour,
+                                      borderRadius: BorderRadius.circular(3)),
+                                  child: Text(
+                                    "75-طلبيات العروض".tr,
+                                    style: TextStyle(
+                                        fontSize: 12.sp,
+                                        fontFamily: AppTextStyles.Almarai,
+                                        color: AppColors.whiteColor),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      controller.whatisTheOrder.value
+                          ? OrderListPageOffers()
+                          : OrderListPage()
                     ]),
                   ),
                 ),

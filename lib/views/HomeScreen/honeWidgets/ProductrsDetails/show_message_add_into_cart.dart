@@ -55,7 +55,8 @@ class AddIntoListCart extends StatelessWidget {
                             child: Align(
                               alignment: Alignment.topCenter,
                               child: TextCustom(
-                                  theText: "لقد تم إضافة المنتج إلى السلة",
+                                  theText:
+                                      "59-لقد تم إضافة المنتج إلى السلة".tr,
                                   fontSizeWidth: 17.sp,
                                   fontFamily: AppTextStyles.Almarai,
                                   fontColor: AppColors.balckColorTypeFour),
@@ -66,7 +67,8 @@ class AddIntoListCart extends StatelessWidget {
                         Padding(
                             padding: EdgeInsets.symmetric(horizontal: 20.w),
                             child: Text(
-                              "يمكنك الإطلاع على قائمة السلة للإطلاع على المحتويات وتاكيد الطلبية",
+                              "60-يمكنك الإطلاع على قائمة السلة للإطلاع على المحتويات وتاكيد الطلبية"
+                                  .tr,
                               style: TextStyle(
                                   fontSize: 11.sp,
                                   fontFamily: AppTextStyles.Almarai,
@@ -93,7 +95,7 @@ class AddIntoListCart extends StatelessWidget {
                                       color: AppColors.yellowColor,
                                       borderRadius: BorderRadius.circular(5)),
                                   child: Text(
-                                    "الاخفاء",
+                                    "61-الاخفاء".tr,
                                     style: TextStyle(
                                         fontSize: 12.sp,
                                         fontWeight: FontWeight.w600,
@@ -119,7 +121,7 @@ class AddIntoListCart extends StatelessWidget {
                                       color: AppColors.redColor,
                                       borderRadius: BorderRadius.circular(5)),
                                   child: Text(
-                                    "مشاهدة السلة",
+                                    "62-مشاهدة السلة".tr,
                                     style: TextStyle(
                                         fontSize: 12.sp,
                                         fontFamily: AppTextStyles.Almarai,

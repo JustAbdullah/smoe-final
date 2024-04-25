@@ -5,153 +5,156 @@ import 'package:get/get.dart';
 
 import 'package:lottie/lottie.dart';
 
-import '../../controllers/home_controller.dart';
-import '../../core/constant/app_text_styles.dart';
-import '../../core/constant/appcolors.dart';
-import '../../core/constant/images_path.dart';
-import '../../customWidgets/custom_container.dart';
-import '../../customWidgets/custom_padding.dart';
-import '../../customWidgets/custom_text.dart';
-import '../../customWidgets/custome_textfiled.dart';
-import 'number_phone.dart';
+import '../../../controllers/home_controller.dart';
+import '../../../core/constant/app_text_styles.dart';
+import '../../../core/constant/appcolors.dart';
+import '../../../core/constant/images_path.dart';
+import '../../../customWidgets/custom_container.dart';
+import '../../../customWidgets/custom_padding.dart';
+import '../../../customWidgets/custom_text.dart';
+import '../../../customWidgets/custome_textfiled.dart';
+import '../../WelcomeScreen/welcome_screen.dart';
 
-class NameAuth extends StatelessWidget {
-  const NameAuth({super.key});
+class CodeNumber extends StatelessWidget {
+  const CodeNumber({super.key});
 
   @override
   Widget build(BuildContext context) {
     HomeController homeController = Get.put(HomeController());
     return Scaffold(
-      backgroundColor: AppColors.whiteColorTypeOne,
+      backgroundColor: AppColors.whiteColor,
       body: SafeArea(
           child: Stack(
         children: [
           SingleChildScrollView(
-            child: Column(children: [
-              SizedBox(
-                height: 150.h,
-              ),
-              Align(
-                alignment: Alignment.topCenter,
-                child: TextCustom(
-                    theText: "الإنضمام للتطبيق",
-                    fontSizeWidth: 23,
-                    fontFamily: AppTextStyles.Almarai,
-                    fontColor: AppColors.theAppColorYellow),
-              ),
-              SizedBox(
-                height: 40.h,
-              ),
-              Align(
-                alignment: Alignment.topCenter,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 50.w),
-                  child: Text(
-                    "لقد أوشكت على الانتهاء! فقط قم بإدخال أسمك لإكمال العملية",
-                    style: TextStyle(
-                        height: 1.5.h,
-                        fontSize: 15.5.sp,
-                        fontFamily: AppTextStyles.Almarai,
-                        color: AppColors.balckColorTypeThree),
-                    textAlign: TextAlign.center,
-                  ),
+            child: Form(
+              key: homeController.formSignPassword,
+              child: Column(children: [
+                SizedBox(
+                  height: 100.h,
                 ),
-              ),
-              SizedBox(
-                height: 10.h,
-              ),
-              Align(
-                alignment: Alignment.topCenter,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 50.w),
-                  child: Text(
-                    " رقم الهاتف المُدخل: ${homeController.theNumber.value.toString()} ",
-                    style: TextStyle(
-                        height: 1.5.h,
-                        fontSize: 15.5.sp,
-                        fontFamily: AppTextStyles.Cairo,
-                        color: AppColors.redColor),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 10.h,
-              ),
-              Align(
-                alignment: Alignment.topCenter,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 50.w),
-                  child: Text(
-                    "عزيزي العميل أدخل أسمك هنا",
-                    style: TextStyle(
-                        height: 1.5.h,
-                        fontSize: 17.5.sp,
-                        fontFamily: AppTextStyles.Almarai,
-                        color: AppColors.balckColorTypeThree),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 30.h,
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 70.w),
-                child: TextFormFiledCustom(
-                  labelData: "اسم المستخدم",
-                  hintData: "لطفًا أدخل اسمك هنا",
-                  iconData: Icons.person,
-                  controllerData: homeController.TheNameTextController,
-                  value: (value) {
-                    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
-                        overlays: []);
-                    homeController.TheNameEnter = value.toString();
-                    return value;
-                  },
-                  fillColor: AppColors.whiteColor,
-                  hintColor: AppColors.theAppColorYellow,
-                  iconColor: AppColors.theAppColorYellow,
-                  borderSideColor:
-                      AppColors.balckColorTypeThree.withOpacity(0.3),
-                  fontColor: AppColors.balckColorTypeThree,
-                  obscureText: false,
-                  keyboardType: TextInputType.name,
-                  autofillHints: [AutofillHints.name],
-                  onChanged: (value) {
-                    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
-                        overlays: []);
-                    homeController.TheNameEnter = value.toString();
-                    return value;
-                  },
-                  validator: (value) {},
-                ),
-              ),
-              SizedBox(
-                height: 20.h,
-              ),
-              SizedBox(
-                height: 30.h,
-              ),
-              InkWell(
-                onTap: () {
-                  homeController.SignUp(
-                    homeController.TheNameEnter.toString(),
-                    homeController.theNumber.value.toString(),
-                  );
-                },
-                child: ContainerCustom(
-                  colorContainer: AppColors.theAppColorYellow,
-                  widthContainer: 200,
-                  heigthContainer: 40,
+                Align(
+                  alignment: Alignment.topCenter,
                   child: TextCustom(
-                      theText: "الإنهاء",
-                      fontSizeWidth: 16,
+                      fontWeight: FontWeight.bold,
+                      theText: "248-الإنضمام للتطبيق".tr,
+                      fontSizeWidth: 23,
                       fontFamily: AppTextStyles.Almarai,
-                      fontColor: AppColors.whiteColor),
+                      fontColor: AppColors.theAppColorYellow),
                 ),
-              ),
-            ]),
+                SizedBox(
+                  height: 40.h,
+                ),
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 50.w),
+                    child: Text(
+                      "249-نشكرك على طلب الإنضمام الرجاء إكمال التالي".tr,
+                      style: TextStyle(
+                          height: 1.5.h,
+                          fontSize: 15.5.sp,
+                          fontFamily: AppTextStyles.Almarai,
+                          color:
+                              AppColors.balckColorTypeThree.withOpacity(0.5)),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 10.h,
+                ),
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 50.w),
+                    child: Text(
+                      "${homeController.theNumber.value.toString()} ",
+                      style: TextStyle(
+                          height: 1.5.h,
+                          fontSize: 15.5.sp,
+                          fontFamily: AppTextStyles.Cairo,
+                          color: AppColors.redColor),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 40.h,
+                ),
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 50.w),
+                    child: Text(
+                      "250-عليك إدخال كود التحقق المرسل إلى رقمك بالأعلى..".tr,
+                      style: TextStyle(
+                          height: 1.5.h,
+                          fontSize: 17.sp,
+                          fontFamily: AppTextStyles.Almarai,
+                          color:
+                              AppColors.balckColorTypeThree.withOpacity(0.7)),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 20.h,
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 70.w),
+                  child: TextFormFiledCustom(
+                    labelData: "228-كود التحقق".tr,
+                    hintData: "229-لطفًا أدخل كود التحقق".tr,
+                    iconData: Icons.copy_rounded,
+                    controllerData: homeController.TheCodeTextController,
+                    value: (value) {
+                      SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+                          overlays: []);
+                      homeController.theCodeString = value.toString();
+                      return value;
+                    },
+                    fillColor: AppColors.whiteColor,
+                    hintColor: AppColors.theAppColorYellow,
+                    iconColor: AppColors.theAppColorYellow,
+                    borderSideColor:
+                        AppColors.balckColorTypeThree.withOpacity(0.3),
+                    fontColor: AppColors.balckColorTypeThree,
+                    obscureText: false,
+                    keyboardType: TextInputType.number,
+                    autofillHints: [AutofillHints.password],
+                    onChanged: (value) {
+                      SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+                          overlays: []);
+                      homeController.theCodeString = value.toString();
+                      return value;
+                    },
+                    validator: (value) {},
+                  ),
+                ),
+                SizedBox(
+                  height: 120.h,
+                ),
+                InkWell(
+                  onTap: () {
+                    homeController.signInWithPhoneNumber(
+                      homeController.verificationIdSaved.toString(),
+                      homeController.theCodeString.toString(),
+                    );
+                  },
+                  child: ContainerCustom(
+                    colorContainer: AppColors.theAppColorYellow,
+                    widthContainer: 200,
+                    heigthContainer: 40,
+                    child: TextCustom(
+                        theText: "230-المتابعة".tr,
+                        fontSizeWidth: 16,
+                        fontFamily: AppTextStyles.Almarai,
+                        fontColor: AppColors.balckColorTypeFour),
+                  ),
+                ),
+              ]),
+            ),
           ),
           GetX<HomeController>(
               builder: (controller) => Visibility(
@@ -180,7 +183,7 @@ class NameAuth extends StatelessWidget {
                       children: [
                         Lottie.asset(ImagesPath.loadingAnimation, width: 140.w),
                         Text(
-                          "يتم التحقق الان",
+                          "231-يتم التحقق الان".tr,
                           style: TextStyle(
                             color: AppColors.whiteColor,
                             fontFamily: AppTextStyles.Almarai,
@@ -221,7 +224,8 @@ class NameAuth extends StatelessWidget {
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 20.w),
                             child: Text(
-                              "لقد اتممت التحقق بنجاح ,,يمكنك الان من إدخال الاسم من أجل إكمال إنشاء الحساب ,شُكرا على صبرك",
+                              "251-لقد اتممت التحقق بنجاح ,,يمكنك الان من إدخال الاسم من أجل إكمال إنشاء الحساب ,شُكرا على صبرك"
+                                  .tr,
                               style: TextStyle(
                                 height: 1.7.h,
                                 color: AppColors.whiteColor,
@@ -244,7 +248,7 @@ class NameAuth extends StatelessWidget {
                               colorContainer: AppColors.theAppColorYellow,
                               child: Center(
                                 child: TextCustom(
-                                    theText: "التوجة الان",
+                                    theText: "252-التوجة الان".tr,
                                     fontSizeWidth: 20,
                                     fontFamily: AppTextStyles.Almarai,
                                     fontColor: AppColors.balckColorTypeThree),
@@ -286,7 +290,8 @@ class NameAuth extends StatelessWidget {
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 20.w),
                             child: Text(
-                              "عزيزي المستخدم هناك إشكالية,,الرجاء  المحاولة مجددًا لاحقًا",
+                              "253-عزيزي المستخدم هناك إشكالية,,الرجاء المحاولة مجددًا لاحقًا"
+                                  .tr,
                               style: TextStyle(
                                 height: 1.7.h,
                                 color: AppColors.whiteColor,
@@ -303,7 +308,7 @@ class NameAuth extends StatelessWidget {
                               onTap: () {
                                 homeController.cleanTheSignUp();
 
-                                Get.to(NumberPhone());
+                                Get.to(WelcomeScreen());
                               },
                               child: ContainerCustom(
                                 widthContainer: 200.w,
@@ -311,7 +316,7 @@ class NameAuth extends StatelessWidget {
                                 colorContainer: AppColors.theAppColorYellow,
                                 child: Center(
                                   child: TextCustom(
-                                      theText: "الاخفاء",
+                                      theText: "247-الاخفاء".tr,
                                       fontSizeWidth: 20,
                                       fontFamily: AppTextStyles.Almarai,
                                       fontColor: AppColors.balckColorTypeThree),

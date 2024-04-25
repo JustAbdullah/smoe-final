@@ -27,7 +27,7 @@ class TopHeader extends StatelessWidget {
                   Padding(
                       padding: EdgeInsets.only(right: 30.w, top: 10.h),
                       child: TextCustom(
-                        theText: "سموي",
+                        theText: "16-سموي".tr,
                         fontSizeWidth: 20,
                         fontFamily: AppTextStyles.Marhey,
                         fontColor: AppColors.balckColorTypeFour,

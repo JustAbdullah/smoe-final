@@ -1,8 +1,8 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:lottie/lottie.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../controllers/home_controller.dart';
@@ -23,6 +23,44 @@ class Offers extends StatefulWidget {
 }
 
 class _OffersState extends State<Offers> {
+  final ScrollController _scrollController = ScrollController();
+  Timer? _timer;
+  void _startAutoScroll() {
+    const autoScrollDuration = Duration(seconds: 5);
+    Timer.periodic(autoScrollDuration, (timer) {
+      // التحقق من الحالة قبل التمرير
+      final maxScroll = _scrollController.position.maxScrollExtent;
+      final currentScroll = _scrollController.position.pixels;
+      final scrollAmount = 205.w; // حسب حجم العنصر الخاص بك
+
+      if (currentScroll + scrollAmount >= maxScroll) {
+        _scrollController.animateTo(
+          0.0,
+          duration: Duration(seconds: 1),
+          curve: Curves.easeOut,
+        );
+      } else {
+        _scrollController.animateTo(
+          currentScroll + scrollAmount,
+          duration: Duration(seconds: 1),
+          curve: Curves.easeOut,
+        );
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _startAutoScroll();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     HomeController homeController = Get.put(HomeController());
@@ -37,6 +75,7 @@ class _OffersState extends State<Offers> {
                   widthContainer: MediaQuery.of(context).size.width,
                   colorContainer: AppColors.whiteColorTypeOne,
                   child: ListView.builder(
+                      controller: _scrollController,
                       scrollDirection: Axis.horizontal,
                       itemCount: homeController.dataOffersList.length,
                       shrinkWrap: true,
@@ -57,7 +96,9 @@ class _OffersState extends State<Offers> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   InkWell(
-                                    onTap: () {},
+                                    onTap: () {
+                                      homeController.goToDetailsOfers(index);
+                                    },
                                     child: CustomCachedNetworkImage(
                                       urlTheImage: homeController
                                           .dataOffersList[index].img
@@ -108,7 +149,7 @@ class _OffersState extends State<Offers> {
                                         width: 2.w,
                                       ),
                                       TextCustom(
-                                        theText: "ريال",
+                                        theText: "17-ريال".tr,
                                         fontColor:
                                             AppColors.balckColorTypeThree,
                                         fontFamily: AppTextStyles.Almarai,
@@ -159,7 +200,7 @@ class _OffersState extends State<Offers> {
                                       highlightColor: AppColors.whiteColor,
                                       enabled: true,
                                       child: TextCustom(
-                                        theText: "يتم التحميل",
+                                        theText: "18-يتم التحميل".tr,
                                         fontColor: AppColors.whiteColor,
                                         fontFamily: AppTextStyles.Marhey,
                                         fontSizeWidth: 15,

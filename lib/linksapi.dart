@@ -10,6 +10,7 @@ class AppLinksApi {
   static const Getextras = "${path}/get_extras.php";
 ////////////...............Auth...................//////////////
   static const SignUp = "${path}/sign_up_s.php";
+  static const login = "${path}/login_s.php";
 
   static const getUserData = "${path}/get_data_user_s.php";
   ////////////////////// ADD Orders..............///////////////////////
@@ -35,8 +36,17 @@ class AppLinksApi {
 ///////////////////Get Products By Type..........///////
 
   static const getProductsByType = "${path}/get_products_by_types_s.php";
-  static const getProductsBySearching =
-      "https://larra.xyz/php_choc/searching_in_products_s.php";
+  static const getProductsBySearching = "${path}/searching_in_products_s.php";
+
+  ////////////////////////////Delete Shopping Cart.........................../////////
+
+  static const deleteFromItemsCart = "${path}/delete_item_from_order.php";
+  static const deleteALLITMESCART = "${path}/delete_shopping_order_s.php";
+
+////////////////////////////
+
+  static const addOrderOffers = "${path}/create_order_offers_s.php";
+  static const getOrderOffers = "${path}/get_offers_s_orders.php";
 
   ///
 }

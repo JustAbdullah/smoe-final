@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:smoe_app_final/controllers/home_controller.dart';
-import 'package:smoe_app_final/views/HomeScreen/honeWidgets/TheOrderInCart/PartOfCart/cart.dart';
 
 import '../../../../../core/constant/app_text_styles.dart';
 import '../../../../../core/constant/appcolors.dart';
-import '../../../../../customWidgets/custom_padding.dart';
-import '../../../../../customWidgets/custom_text.dart';
+
 import 'order_cart.dart';
 
 class OrderPage extends StatelessWidget {
@@ -15,7 +13,6 @@ class OrderPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    HomeController homeController = Get.put(HomeController());
     return GetX<HomeController>(
         builder: (controller) => Visibility(
             visible: controller.showThePartOFOrder.value,
@@ -40,7 +37,7 @@ class OrderPage extends StatelessWidget {
                               color: AppColors.yellowColor,
                               borderRadius: BorderRadius.circular(5)),
                           child: Text(
-                            "محتويات الطلبية",
+                            "213-محتويات الطلبية".tr,
                             style: TextStyle(
                                 fontSize: 20,
                                 fontFamily: AppTextStyles.Almarai,
@@ -57,7 +54,8 @@ class OrderPage extends StatelessWidget {
                         height: 20.h,
                       ),
                       Text(
-                        "يتم مراجعة الطلب...سيتم تاكيد العملية وإنتقالها في حال الإنتهاء من المراجعة وإشعارك",
+                        "214-يتم مراجعة الطلب...سيتم تاكيد العملية وإنتقالها في حال الإنتهاء من المراجعة وإشعارك"
+                            .tr,
                         style: TextStyle(
                             color: const Color.fromARGB(255, 57, 57, 57),
                             fontFamily: AppTextStyles.Almarai,

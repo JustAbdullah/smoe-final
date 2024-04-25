@@ -70,7 +70,7 @@ class ProductsDetails extends StatelessWidget {
                           child: Align(
                             alignment: Alignment.topCenter,
                             child: TextCustom(
-                                theText: "تفاصيل المنتج",
+                                theText: "19-تفاصيل المنتج".tr,
                                 fontSizeWidth: 20,
                                 fontFamily: AppTextStyles.Almarai,
                                 fontColor: AppColors.balckColorTypeFour),
@@ -122,7 +122,7 @@ class ProductsDetails extends StatelessWidget {
                                     fontFamily: AppTextStyles.Almarai,
                                     fontColor: AppColors.balckColorTypeFour),
                                 TextCustom(
-                                    theText: "ريال",
+                                    theText: "17-ريال".tr,
                                     fontSizeWidth: 17,
                                     fontFamily: AppTextStyles.Almarai,
                                     fontColor: AppColors.balckColorTypeFour),
@@ -144,7 +144,7 @@ class ProductsDetails extends StatelessWidget {
                                       color: AppColors.yellowColor,
                                       borderRadius: BorderRadius.circular(10)),
                                   child: Text(
-                                    "الوصف",
+                                    "20-الوصف".tr,
                                     style: TextStyle(
                                         fontSize: 16.sp,
                                         fontWeight: FontWeight.w600,
@@ -190,7 +190,7 @@ class ProductsDetails extends StatelessWidget {
                                       color: AppColors.yellowColor,
                                       borderRadius: BorderRadius.circular(10)),
                                   child: Text(
-                                    "الاضافات",
+                                    "21-الاضافات".tr,
                                     style: TextStyle(
                                         fontSize: 16.sp,
                                         fontWeight: FontWeight.w600,
@@ -218,7 +218,7 @@ class ProductsDetails extends StatelessWidget {
                                       color: AppColors.balckColorTypeFour,
                                       borderRadius: BorderRadius.circular(10)),
                                   child: Text(
-                                    "الكمية والطلب",
+                                    "23-الكمية والطلب".tr,
                                     style: TextStyle(
                                         fontSize: 16.sp,
                                         fontWeight: FontWeight.w600,
@@ -267,7 +267,7 @@ class ProductsDetails extends StatelessWidget {
                                   width: 2.w,
                                 ),
                                 TextCustom(
-                                    theText: "قطعة",
+                                    theText: "24-قطعة".tr,
                                     fontSizeWidth: 17,
                                     fontFamily: AppTextStyles.Almarai,
                                     fontColor: AppColors.balckColorTypeFour),
@@ -301,7 +301,7 @@ class ProductsDetails extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 TextCustom(
-                                    theText: "إجمالي السعر:",
+                                    theText: "25-إجمالي السعر:".tr,
                                     fontSizeWidth: 17,
                                     fontFamily: AppTextStyles.Almarai,
                                     fontColor: AppColors.balckColorTypeFour),
@@ -319,7 +319,7 @@ class ProductsDetails extends StatelessWidget {
                                   width: 2.w,
                                 ),
                                 TextCustom(
-                                    theText: "ريال",
+                                    theText: "17-ريال".tr,
                                     fontSizeWidth: 17,
                                     fontFamily: AppTextStyles.Almarai,
                                     fontColor: AppColors.balckColorTypeFour),
@@ -327,13 +327,15 @@ class ProductsDetails extends StatelessWidget {
                             ),
                           )),
                       PaddingCustom(
-                          theTop: 17.h,
+                          theTop: 7.h,
                           child: Align(
                             alignment: Alignment.topCenter,
                             child: TextCustom(
                                 theText:
-                                    "يتم إحتساب كل قطعة مضاف إليها الإضافات",
+                                    "26-يتم إحتساب كل قطعة مضاف إليها الإضافات"
+                                        .tr,
                                 fontSizeWidth: 10,
+                                fontWeight: FontWeight.bold,
                                 fontFamily: AppTextStyles.Almarai,
                                 fontColor:
                                     const Color.fromARGB(255, 69, 68, 68)),
@@ -349,46 +351,57 @@ class ProductsDetails extends StatelessWidget {
                               Align(
                                 child: InkWell(
                                   onTap: () async {
-                                    controller.generateRandomOrderNumber();
-                                    controller.addIntListProducts(
-                                        controller.randomNumber.toString(),
-                                        controller.theTotalPrice.value
-                                            .toString(),
-                                        controller
-                                            .dataProductsList[controller
-                                                .indexTheProductsList.value]
-                                            .id
-                                            .toString(),
-                                        controller.TheNumberOfItme.value
-                                            .toString());
-                                    controller.MessageAddedIntoList.value =
-                                        true;
-                                    await Future.delayed(
-                                        const Duration(seconds: 3), () async {
-                                      controller.chosedTheExtras.isEmpty
-                                          ? {}
-                                          : {
-                                              controller.chosedTheExtras
-                                                  .forEach((k, v) {
-                                                controller.addIntListProductsEtr(
-                                                    controller.randomNumber
-                                                        .toString(),
+                                    if (controller.displayIsHavaAccount.value ==
+                                        0) {
+                                      controller.isNoAccount.value = true;
+                                    } else {
+                                      if (controller
+                                          .appServices.sharedPreferences
+                                          .containsKey('Long')) {
+                                        controller.waitAddExtProducts.value =
+                                            true;
+                                        controller.generateRandomOrderNumber();
+                                        controller.addIntListProducts(
+                                            controller.randomNumber.toString(),
+                                            controller.theTotalPrice.value
+                                                .toString(),
+                                            controller
+                                                .dataProductsListByType[
                                                     controller
-                                                        .dataProductsList[controller
-                                                            .indexTheProductsList
+                                                        .indexTheProductsListType
+                                                        .value]
+                                                .id
+                                                .toString(),
+                                            controller.TheNumberOfItme.value
+                                                .toString());
+
+                                        if (!controller
+                                            .chosedTheExtras.isEmpty) {
+                                          for (var entry in controller
+                                              .chosedTheExtras.entries) {
+                                            await controller.addIntListProductsEtr(
+                                                controller.randomNumber
+                                                    .toString(),
+                                                controller
+                                                    .dataProductsListByType[
+                                                        controller
+                                                            .indexTheProductsListType
                                                             .value]
-                                                        .id
-                                                        .toString(),
-                                                    v.toString(),
-                                                    controller
-                                                        .getIdOfListProducts
-                                                        .value
-                                                        .toString());
-                                                print(v.toString());
-                                                print("/////////////////");
-                                              }),
-                                            };
-                                    });
+                                                    .id
+                                                    .toString(),
+                                                entry.value.toString(),
+                                                controller.listOrderProductIdNew
+                                                    .toString());
+                                          }
+                                          controller.waitAddExtProducts.value =
+                                              false;
+                                          controller.MessageAddedIntoList
+                                              .value = true;
+                                        }
+                                      } else {
+                                        controller.isNoLocation.value = true;
+                                      }
+                                    }
                                   },
                                   child: Container(
                                     alignment: Alignment.center,
@@ -398,7 +411,7 @@ class ProductsDetails extends StatelessWidget {
                                         color: AppColors.redColor,
                                         borderRadius: BorderRadius.circular(3)),
                                     child: Text(
-                                      "إضافة للسلة",
+                                      "27-إضافة للسلة".tr,
                                       style: TextStyle(
                                           fontSize: 16.sp,
                                           fontFamily: AppTextStyles.Almarai,
@@ -409,21 +422,41 @@ class ProductsDetails extends StatelessWidget {
                                 ),
                               ),
                               Align(
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  width: 150.w,
-                                  height: 40.h,
-                                  decoration: BoxDecoration(
-                                      color: AppColors.yellowColor,
-                                      borderRadius: BorderRadius.circular(3)),
-                                  child: Text(
-                                    "إنهاء الطلب",
-                                    style: TextStyle(
-                                        fontSize: 16.sp,
-                                        fontWeight: FontWeight.w600,
-                                        fontFamily: AppTextStyles.Almarai,
-                                        color: AppColors.balckColorTypeFour),
-                                    textAlign: TextAlign.center,
+                                child: InkWell(
+                                  onTap: () async {
+                                    if (controller.displayIsHavaAccount.value ==
+                                        0) {
+                                      controller.isNoAccount.value = true;
+                                    } else {
+                                      if (controller
+                                          .appServices.sharedPreferences
+                                          .containsKey('Long')) {
+                                        controller.generateRandomOrderNumber();
+                                        controller.addIntoOrder(
+                                            controller.randomNumber.toString(),
+                                            controller.theTotalPrice.value
+                                                .toString());
+                                      } else {
+                                        controller.isNoLocation.value = true;
+                                      }
+                                    }
+                                  },
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    width: 150.w,
+                                    height: 40.h,
+                                    decoration: BoxDecoration(
+                                        color: AppColors.yellowColor,
+                                        borderRadius: BorderRadius.circular(3)),
+                                    child: Text(
+                                      "28-إنهاء الطلب".tr,
+                                      style: TextStyle(
+                                          fontSize: 16.sp,
+                                          fontWeight: FontWeight.w600,
+                                          fontFamily: AppTextStyles.Almarai,
+                                          color: AppColors.balckColorTypeFour),
+                                      textAlign: TextAlign.center,
+                                    ),
                                   ),
                                 ),
                               ),

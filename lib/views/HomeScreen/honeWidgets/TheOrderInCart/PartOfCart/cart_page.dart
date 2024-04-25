@@ -6,15 +6,12 @@ import 'package:smoe_app_final/views/HomeScreen/honeWidgets/TheOrderInCart/PartO
 
 import '../../../../../core/constant/app_text_styles.dart';
 import '../../../../../core/constant/appcolors.dart';
-import '../../../../../customWidgets/custom_padding.dart';
-import '../../../../../customWidgets/custom_text.dart';
 
 class CartPage extends StatelessWidget {
   const CartPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    HomeController homeController = Get.put(HomeController());
     return GetX<HomeController>(
         builder: (controller) => Visibility(
             visible: controller.showThePartOFCart.value,
@@ -39,7 +36,7 @@ class CartPage extends StatelessWidget {
                               color: AppColors.yellowColor,
                               borderRadius: BorderRadius.circular(5)),
                           child: Text(
-                            "محتويات السلة",
+                            "219-محتويات السلة".tr,
                             style: TextStyle(
                                 fontSize: 20,
                                 fontFamily: AppTextStyles.Almarai,
@@ -72,7 +69,7 @@ class CartPage extends StatelessWidget {
                                 Row(
                                   children: [
                                     Text(
-                                      "سعر الخصم:",
+                                      "220-سعر الخصم:".tr,
                                       style: TextStyle(
                                           color: const Color.fromARGB(
                                               255, 57, 57, 57),
@@ -97,7 +94,7 @@ class CartPage extends StatelessWidget {
                                       width: 3.w,
                                     ),
                                     Text(
-                                      "ريال",
+                                      "17-ريال".tr,
                                       style: TextStyle(
                                           color: const Color.fromARGB(
                                               255, 57, 57, 57),
@@ -119,7 +116,7 @@ class CartPage extends StatelessWidget {
                                 Row(
                                   children: [
                                     Text(
-                                      "إجمالي السعر:",
+                                      "221-إجمالي السعر:".tr,
                                       style: TextStyle(
                                           color: const Color.fromARGB(
                                               255, 57, 57, 57),
@@ -147,7 +144,7 @@ class CartPage extends StatelessWidget {
                                       width: 3.w,
                                     ),
                                     Text(
-                                      "ريال",
+                                      "17-ريال".tr,
                                       style: TextStyle(
                                           color: const Color.fromARGB(
                                               255, 57, 57, 57),

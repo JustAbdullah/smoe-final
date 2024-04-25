@@ -1,3 +1,8 @@
+import '../../localization/changelanguage.dart';
+import 'package:get/get.dart';
+
+ChangeLanguageToLocale homeController = Get.put(ChangeLanguageToLocale());
+
 class offers {
   var id;
   var name;
@@ -15,8 +20,12 @@ class offers {
   factory offers.fromJson(Map<String, dynamic> json) {
     return offers(
       id: json['offer_id'] ?? 0,
-      name: json['offer_name'] ?? 'Default Title',
-      about: json['offer_about'] ?? 'Default about',
+      name: homeController.isChange.value == true
+          ? json['offer_name']
+          : json['offer_name_en'] ?? 'Default Title',
+      about: homeController.isChange.value == true
+          ? json['offer_about']
+          : json['offer_about_en'] ?? 'Default about',
       img: json['offer_image'] ?? 'Default image',
       price: json['offer_price'] ?? 0,
     );

@@ -4,13 +4,13 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:smoe_app_final/views/HomeScreen/home_screen.dart';
+
 import 'firebase_options.dart';
 import 'core/constant/color_primary.dart';
 import 'core/localization/changelanguage.dart';
 import 'core/localization/translation.dart';
 import 'core/services/appservices.dart';
-import 'views/Auth/number_phone.dart';
+
 import 'views/loadingScreen/loading_screen.dart';
 
 Future<void> main() async {
@@ -43,7 +43,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
-    SystemChrome.restoreSystemUIOverlays();
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: ModeColor.mode,
+    ));
     // ignore: deprecated_member_use
     WidgetsBinding.instance.window.physicalSize.height;
     // ignore: deprecated_member_use
@@ -63,8 +65,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(primarySwatch: ModeColor.mode),
       builder: (context, child) {
         final mediaQueryData = MediaQuery.of(context);
+        // ignore: deprecated_member_use
         final scale = mediaQueryData.textScaleFactor.clamp(0.9, 0.9);
         return MediaQuery(
+            // ignore: deprecated_member_use
             data: MediaQuery.of(context).copyWith(textScaleFactor: scale),
             child: child!);
       },

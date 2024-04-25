@@ -1,10 +1,7 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:lottie/lottie.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:smoe_app_final/core/data/model/products.dart';
 
 import '../../../../controllers/home_controller.dart';
 import '../../../../core/constant/app_text_styles.dart';
@@ -50,10 +47,29 @@ class _ExtrasWidgetsState extends State<ExtrasWidgets> {
                               child: GetX<HomeController>(
                                 builder: (ThecontrollerN) => InkWell(
                                   onTap: () {
-                                    ThecontrollerN.indexTheExtrasList.value =
-                                        index;
-                                    ThecontrollerN.AddExtras();
-                                    setState(() {});
+                                    if (ThecontrollerN.chosedTheExtras.containsKey(
+                                        "${ThecontrollerN.dataExtrasList[index].id}")) {
+                                      ThecontrollerN.PriceProducts.value =
+                                          ThecontrollerN.PriceProducts.value -
+                                              int.parse(ThecontrollerN
+                                                  .dataExtrasList[index].price);
+
+                                      ThecontrollerN.Itme();
+
+                                      ThecontrollerN.chosedTheExtras.remove(
+                                          "${ThecontrollerN.dataExtrasList[index].id}");
+                                    } else {
+                                      ThecontrollerN.PriceProducts.value =
+                                          ThecontrollerN.PriceProducts.value +
+                                              int.parse(ThecontrollerN
+                                                  .dataExtrasList[index].price);
+                                      ThecontrollerN.Itme();
+                                      ThecontrollerN.chosedTheExtras[controller
+                                              .dataExtrasList[index].id] =
+                                          controller.dataExtrasList[index].idEx;
+
+                                      setState(() {});
+                                    }
                                   },
                                   child: Container(
                                     decoration: BoxDecoration(
@@ -110,7 +126,7 @@ class _ExtrasWidgetsState extends State<ExtrasWidgets> {
                                               width: 2.w,
                                             ),
                                             TextCustom(
-                                              theText: "ريال",
+                                              theText: "17-ريال".tr,
                                               fontColor:
                                                   AppColors.balckColorTypeThree,
                                               fontFamily: AppTextStyles.Almarai,
@@ -163,7 +179,7 @@ class _ExtrasWidgetsState extends State<ExtrasWidgets> {
                                         highlightColor: AppColors.whiteColor,
                                         enabled: true,
                                         child: TextCustom(
-                                          theText: "يتم التحميل",
+                                          theText: "18-يتم التحميل".tr,
                                           fontColor: AppColors.whiteColor,
                                           fontFamily: AppTextStyles.Marhey,
                                           fontSizeWidth: 15,

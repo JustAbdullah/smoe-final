@@ -1,17 +1,12 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:lottie/lottie.dart';
-import 'package:shimmer/shimmer.dart';
 
 import '../../../controllers/home_controller.dart';
 import '../../../core/constant/app_text_styles.dart';
 import '../../../core/constant/appcolors.dart';
-import '../../../core/constant/images_path.dart';
 import '../../../customWidgets/custom_cachednetworkimage.dart';
 import '../../../customWidgets/custom_container.dart';
-import '../../../customWidgets/custom_container_api.dart';
 import '../../../customWidgets/custom_padding.dart';
 import '../../../customWidgets/custom_text.dart';
 
@@ -23,18 +18,22 @@ class AllProductdSearching extends StatelessWidget {
     HomeController homeController = Get.put(HomeController());
     return Obx(() {
       return homeController.isNotEmptyProducrsSearching.value == true
-          ? SizedBox(
-              width: MediaQuery.sizeOf(context).width,
-              child: Expanded(
-                child: ListView.builder(
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: homeController.dataProductsListSearching.length,
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10.w),
-                        child: PaddingCustom(
-                          theBottom: 10,
+          ? LimitedBox(
+              maxHeight: 400.h,
+              child: ListView.builder(
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount:
+                      homeController.dataProductsListSearching.length ?? 0,
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10.w),
+                      child: PaddingCustom(
+                        theBottom: 10,
+                        child: InkWell(
+                          onTap: () {
+                            homeController.goToDetailsProductsSearhcing(index);
+                          },
                           child: ContainerCustom(
                             theBorderRadius: 5,
                             colorContainer: AppColors.whiteColor,
@@ -82,7 +81,7 @@ class AllProductdSearching extends StatelessWidget {
                                             width: 4.w,
                                           ),
                                           TextCustom(
-                                            theText: "ريال",
+                                            theText: "17-ريال".tr,
                                             fontColor:
                                                 AppColors.balckColorTypeFour,
                                             fontFamily: AppTextStyles.Marhey,
@@ -153,13 +152,13 @@ class AllProductdSearching extends StatelessWidget {
                             ),
                           ),
                         ),
-                      );
-                    }),
-              ),
+                      ),
+                    );
+                  }),
             )
           : Center(
               child: Text(
-              "لايوجد بيانات من عملية البحث",
+              "22-لايوجد بيانات من عملية البحث".tr,
               style: TextStyle(
                   fontSize: 14.sp,
                   height: 1.7.h,

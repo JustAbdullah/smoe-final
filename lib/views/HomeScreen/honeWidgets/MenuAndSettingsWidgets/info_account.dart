@@ -13,7 +13,6 @@ class InfoAcount extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    HomeController homeController = Get.put(HomeController());
 
     return GetX<HomeController>(
         builder: (controller) => Visibility(

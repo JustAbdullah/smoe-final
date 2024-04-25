@@ -16,7 +16,7 @@ class LoadingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     HomeController homeController = Get.put(HomeController());
-    homeController.goToHome();
+    homeController.WhereGoingTheApp();
     return Scaffold(
       backgroundColor: AppColors.theAppColorYellow,
       body: Stack(children: [
@@ -35,7 +35,7 @@ class LoadingScreen extends StatelessWidget {
           child: Align(
             alignment: Alignment.bottomCenter,
             child: TextCustom(
-              theText: "أنتظر قليلًا",
+              theText: "1-أنتظر قليلًا".tr,
               fontSizeWidth: 20,
               fontFamily: AppTextStyles.Almarai,
               fontColor: AppColors.blackColor,

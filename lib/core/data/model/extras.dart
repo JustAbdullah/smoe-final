@@ -1,3 +1,8 @@
+import '../../localization/changelanguage.dart';
+import 'package:get/get.dart';
+
+ChangeLanguageToLocale homeController = Get.put(ChangeLanguageToLocale());
+
 class Extras {
   var id;
   var idProduct;
@@ -15,7 +20,9 @@ class Extras {
   factory Extras.fromJson(Map<String, dynamic> json) {
     return Extras(
       id: json['extras_products_id'] ?? 0,
-      name: json['extra_name_ar'] ?? 'Default Title',
+      name: homeController.isChange.value == true
+          ? json['extra_name_ar']
+          : json['extra_name_en'] ?? 'Default Title',
       idProduct: json['products_id'] ?? 'D',
       idEx: json['extra_id'] ?? 0,
       price: json['extra_price'] ?? 0,

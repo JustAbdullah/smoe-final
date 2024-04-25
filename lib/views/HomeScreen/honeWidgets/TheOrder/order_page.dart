@@ -1,18 +1,11 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:lottie/lottie.dart';
-import 'package:shimmer/shimmer.dart';
+import 'package:smoe_app_final/views/HomeScreen/honeWidgets/TheOrder/TheOrderDetails/order_detials.dart';
 
 import '../../../../controllers/home_controller.dart';
 import '../../../../core/constant/app_text_styles.dart';
 import '../../../../core/constant/appcolors.dart';
-import '../../../../core/constant/images_path.dart';
-import '../../../../customWidgets/custom_cachednetworkimage.dart';
-import '../../../../customWidgets/custom_container.dart';
-import '../../../../customWidgets/custom_container_api.dart';
-import '../../../../customWidgets/custom_padding.dart';
 import '../../../../customWidgets/custom_text.dart';
 
 class OrderListPage extends StatelessWidget {
@@ -26,10 +19,11 @@ class OrderListPage extends StatelessWidget {
       return Container(
           width: MediaQuery.sizeOf(context).width,
           child: homeController.isNotEmptyListOFOrder.value
-              ? ContainerCustom(
-                  heigthContainer: 500.h,
-                  widthContainer: MediaQuery.of(context).size.width,
-                  colorContainer: AppColors.whiteColor,
+              ? Container(
+                  alignment: Alignment.topCenter,
+                  height: 500.h,
+                  width: MediaQuery.of(context).size.width,
+                  color: AppColors.whiteColor,
                   child: ListView.builder(
                       itemCount: homeController.dataOrderList.length,
                       shrinkWrap: true,
@@ -56,7 +50,7 @@ class OrderListPage extends StatelessWidget {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          "رقم الطلبية:",
+                                          "76-رقم الطلبية:".tr,
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             color:
@@ -95,7 +89,7 @@ class OrderListPage extends StatelessWidget {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          "إجمالي الطلبية:",
+                                          "77-إجمالي الطلبية:".tr,
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             color:
@@ -121,7 +115,7 @@ class OrderListPage extends StatelessWidget {
                                               width: 2.w,
                                             ),
                                             TextCustom(
-                                              theText: "ريال",
+                                              theText: "78-ريال".tr,
                                               fontColor:
                                                   AppColors.balckColorTypeThree,
                                               fontFamily: AppTextStyles.Almarai,
@@ -143,7 +137,7 @@ class OrderListPage extends StatelessWidget {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
-                                              "حالة الطلبية:",
+                                              "79-حالة الطلبية:".tr,
                                               style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 color: AppColors
@@ -161,8 +155,8 @@ class OrderListPage extends StatelessWidget {
                                                                 index]
                                                             .order_status ==
                                                         3
-                                                    ? "تم التسليم"
-                                                    : "مراجعة",
+                                                    ? "80-تم التسليم".tr
+                                                    : "81-مراجعة".tr,
                                                 fontColor: AppColors
                                                     .balckColorTypeThree,
                                                 fontFamily:
@@ -173,8 +167,15 @@ class OrderListPage extends StatelessWidget {
                                                 height: 10.h,
                                               ),
                                               InkWell(
+                                                onTap: () {
+                                                  homeController
+                                                      .goToDetailsOrder(index);
+
+                                                  Get.to(
+                                                      OrderDetialsOnListOrder());
+                                                },
                                                 child: Text(
-                                                  "التفاصيل",
+                                                  "82-التفاصيل".tr,
                                                   style: TextStyle(
                                                     fontWeight: FontWeight.bold,
                                                     color:
@@ -247,49 +248,12 @@ class OrderListPage extends StatelessWidget {
                         );
                       }),
                 )
-              : ContainerCustom(
-                  heigthContainer: 120,
-                  widthContainer: 1300,
-                  colorContainer: AppColors.whiteColorTypeOne,
-                  child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: 5,
-                      shrinkWrap: true,
-                      itemBuilder: (context, i) {
-                        return Shimmer.fromColors(
-                            baseColor: Color.fromARGB(31, 83, 82, 82),
-                            highlightColor: AppColors.whiteColor,
-                            enabled: true,
-                            child: PaddingCustom(
-                                theRight: 1,
-                                theLeft: 1,
-                                child: Column(children: [
-                                  ContainerCustomApi(
-                                    colorContainer: AppColors.whiteColorTypeOne,
-                                    boxShape: BoxShape.circle,
-                                    heigthContainer: 70.h,
-                                    child: Image.asset(
-                                      "${ImagesPath.LogoApp}",
-                                      width: 80,
-                                      height: 100,
-                                      fit: BoxFit.contain,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 19.h,
-                                  ),
-                                  Shimmer.fromColors(
-                                      baseColor: Color.fromARGB(31, 83, 82, 82),
-                                      highlightColor: AppColors.whiteColor,
-                                      enabled: true,
-                                      child: TextCustom(
-                                        theText: "يتم التحميل",
-                                        fontColor: AppColors.whiteColor,
-                                        fontFamily: AppTextStyles.Marhey,
-                                        fontSizeWidth: 15,
-                                      )),
-                                ])));
-                      })));
+              : Center(
+                  child: TextCustom(
+                      theText: "83-يتم التحميل..قد لاتمتلك اي طلبيات لعرضها".tr,
+                      fontSizeWidth: 16.sp,
+                      fontFamily: AppTextStyles.Almarai,
+                      fontColor: AppColors.theAppColorYellow)));
     });
   }
 }

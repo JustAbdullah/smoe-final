@@ -3,7 +3,9 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
@@ -23,13 +25,18 @@ import '../core/data/model/list_products_cart.dart';
 import '../core/data/model/list_products_extras_cart.dart';
 import '../core/data/model/maintype.dart';
 import '../core/data/model/offers.dart';
+import '../core/data/model/orders_offers.dart';
 import '../core/data/model/products.dart';
 import '../core/services/appservices.dart';
 import '../linksapi.dart';
-import '../views/Auth/name_auth.dart';
-import '../views/Auth/otp_number.dart';
+import '../views/Auth/login/otp_number_login.dart';
+import '../views/Auth/sign_up/name_auth.dart';
+import '../views/Auth/sign_up/otp_number.dart';
 import '../views/HomeScreen/home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
+import '../views/HomeScreen/home_status.dart';
+import '../views/WelcomeScreen/welcome_screen.dart';
 
 class HomeController extends GetxController {
   ////////////////Branch/////
@@ -44,9 +51,23 @@ class HomeController extends GetxController {
 
   //////..........................................////////////////
 
-  goToHome() async {
-    await Future.delayed(const Duration(seconds: 5), () async {
-      Get.offAll(OnBoarding());
+  RxBool theWay = false.obs;
+  WhereGoingTheApp() {
+    Future.delayed(Duration(seconds: 5), () async {
+      if (theWay.value == false) {
+        if (appServices.sharedPreferences.containsKey('onBoarding')) {
+          if (appServices.sharedPreferences.containsKey('isHaveAccount')) {
+            Get.to(HomeStatus());
+            theWay.value = true;
+          } else {
+            Get.to(WelcomeScreen());
+            theWay.value = true;
+          }
+        } else {
+          Get.to(OnBoarding());
+          theWay.value = true;
+        }
+      }
     });
   }
 
@@ -146,8 +167,6 @@ class HomeController extends GetxController {
   Future<void> fetchProductsDataByType(String id) async {
     var response = await http.post(Uri.parse(AppLinksApi.getProductsByType),
         body: {"prooduct_type": id.toString()});
-    isNotEmptyProducrsByType.value = false;
-    dataProductsListByType.value.clear();
 
     if (response.statusCode == 200) {
       List data = json.decode(response.body)["data"];
@@ -164,12 +183,23 @@ class HomeController extends GetxController {
     }
   }
 
+  /////////////////////////////#######################..................... Products Details Type .................../////////////
+  RxBool showTheDetailsProductType = false.obs;
+  RxInt indexTheProductsListType = 0.obs;
+  goToDetailsProductsType(var index) {
+    indexTheProductsListType.value = index;
+    showTheDetailsProductType.value = true;
+    PriceProducts.value = int.tryParse(dataProductsListByType[index].price)!;
+    theTotalPrice.value = int.tryParse(dataProductsListByType[index].price)!;
+  }
+
   /////////////////////#######################................Products Details................#######################//////////////////////////
   RxBool showTheDetailsProduct = false.obs;
   RxInt indexTheProductsList = 0.obs;
   goToDetailsProducts(var index) {
     indexTheProductsList.value = index;
     showTheDetailsProduct.value = true;
+    PriceProducts.value = int.tryParse(dataProductsListByType[index].price)!;
     theTotalPrice.value = int.tryParse(dataProductsList[index].price)!;
   }
 
@@ -196,56 +226,72 @@ class HomeController extends GetxController {
   //////////////////Add To Cart OR order.........................../////////
   Map<String, String> chosedTheExtras = {};
   RxInt indexTheExtrasList = 0.obs;
-
+  RxInt PriceProducts = 0.obs;
   RxInt theTotalPrice = 0.obs;
+  RxInt totalExt = 0.obs;
 
   RxInt TheNumberOfItme = 1.obs;
 
   AddTheItme() {
     TheNumberOfItme.value = TheNumberOfItme.value + 1;
 
-    theTotalPrice.value = theTotalPrice.value +
+    /* theTotalPrice.value = theTotalPrice.value +
         int.parse(
           dataProductsList[indexTheProductsList.value].price.toString(),
-        );
+        );*/
+    theTotalPrice.value = PriceProducts.value * TheNumberOfItme.value;
   }
 
   MusnheItme() {
     if (TheNumberOfItme.value != 1) {
       TheNumberOfItme.value = TheNumberOfItme.value - 1;
 
-      theTotalPrice.value = theTotalPrice.value -
-          int.parse(
-            dataProductsList[indexTheProductsList.value].price.toString(),
-          );
+      theTotalPrice.value = PriceProducts.value * TheNumberOfItme.value;
     } else {}
   }
 
-  AddExtras() {
+  Itme() {
+    theTotalPrice.value = PriceProducts.value * TheNumberOfItme.value;
+  }
+
+  /* AddExtras() {
     if (chosedTheExtras
         .containsKey("${dataExtrasList[indexTheExtrasList.value].id}")) {
-      theTotalPrice.value = theTotalPrice.value -
+      PriceProducts.value = PriceProducts.value -
           int.parse(dataExtrasList[indexTheExtrasList.value].price);
+
+      Itme();
 
       chosedTheExtras.remove("${dataExtrasList[indexTheExtrasList.value].id}");
     } else {
-      theTotalPrice.value = theTotalPrice.value +
+      PriceProducts.value = PriceProducts.value +
           int.parse(dataExtrasList[indexTheExtrasList.value].price);
-
-      chosedTheExtras[dataExtrasList[indexTheExtrasList.value].id.toString()] =
-          dataExtrasList[indexTheExtrasList.value].idEx;
+      Itme();
 
       /////////////
     }
-  }
+  }*/
 
   BackToHome() {
     showTheDetailsProduct.value = false;
-
+    showTheDetailsProductSearching.value = false;
+    showTheDetailsProductType.value = false;
     chosedTheExtras.clear();
+    messagenoCart.value = false;
     TheNumberOfItme.value = 1;
     theTotalPrice.value = 0;
+    PriceProducts.value = 0;
+    theTotalPrice.value = 0;
+    totalExt.value = 0;
+    showOffersDetials.value = false;
+
     MessageAddedIntoList.value = false;
+    PriceOffers.value = 0;
+    theTotalPriceOffers.value = 0;
+
+    messagesAboutOfersInOrder.value = false;
+    indexTheOfferssList.value = 0;
+    messageCreateOrder.value = false;
   }
 
   //////////////////Auth With Number Phone
@@ -325,6 +371,13 @@ class HomeController extends GetxController {
   goToHomeLoginSignUp() {
     cleanTheSignUp();
     Get.to(NameAuth());
+  }
+
+  goToHomeLogin(String phone) {
+    getDataUser(phone);
+    cleanTheSignUp();
+
+    Get.to(HomeScreen());
   }
 
   String userID = "";
@@ -435,6 +488,18 @@ class HomeController extends GetxController {
     return response;
   }
 
+  Future Login(String phone) async {
+    var response = await crud.postRequest(AppLinksApi.login, {
+      'user_number_phone': phone.toString(),
+    });
+    if (response['status'] == "success") {
+      verifyPhoneNumberLogin(phone.toString());
+    } else {
+      ErrorAboutNumber.value = true;
+    }
+    return response;
+  }
+
   getDataUser(String phone) async {
     var response = await crud.postRequest(AppLinksApi.getUserData, {
       'user_number_phone': phone.toString(),
@@ -468,6 +533,49 @@ class HomeController extends GetxController {
     return response;
   }
 
+  void verifyPhoneNumberLogin(String phoneNumber) async {
+    waitCheckNumber.value = true;
+    await _auth.verifyPhoneNumber(
+      phoneNumber: phoneNumber,
+      verificationCompleted: (PhoneAuthCredential credential) async {
+        // تم التحقق من رقم الهاتف تلقائياً
+        await _auth.signInWithCredential(credential);
+        waitCheckNumber.value = false;
+        Get.to(CodeNumberTheLogin());
+        // قم بالتنقل إلى الشاشة التالية أو أي عملية تريدها
+      },
+      verificationFailed: (FirebaseAuthException e) {
+        // فشل التحقق من رقم الهاتف
+        // قم بإظهار رسالة خطأ أو أي عملية تريدها
+        ErrorAboutNumber.value = true;
+      },
+      codeSent: (String verificationId, int? resendToken) {
+        verificationIdSaved.value = verificationId;
+        isSendTheCode.value = true;
+        waitCheckNumber.value = false;
+        Get.to(CodeNumberTheLogin());
+        // تم إرسال رمز التحقق إلى رقم الهاتف
+        // قم بإظهار حقل إدخال لرمز التحقق أو أي عملية تريدها
+        // قم بحفظ قيمة verificationId لاستخدامها لاحقاً
+        // إنشاء مؤقت ينتهي بعد 60 ثانية
+        _timer = Timer(Duration(seconds: 60), () {
+          waitCheckNumber.value;
+          // إذا لم يتم إدخال رمز التحقق قبل انتهاء المؤقت
+          // قم بإظهار رسالة خطأ للمستخدم
+          // يمكنك استخدام أي طريقة تفضلها لإظهار الرسالة
+          // مثلاً يمكنك استخدام Fluttertoast
+          ErrorAboutNumber.value = true;
+        });
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {
+        waitCheckNumber.value;
+        // انتهى وقت انتظار إدخال رمز التحقق
+        isErrorAboutEnterOTP.value = true;
+        // قم بإظهار رسالة تنبيه أو أي عملية تريدها
+      },
+    );
+  }
+
   //////////////////////////////#############################################################/////////////////////////
   ///  //////////////////////////////#############################################################/////////////////////////
   //////////////////////////////#############################################################/////////////////////////
@@ -484,6 +592,8 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    checkConnectivity();
+    //startAutoScroll();
 
     if (isGetData.value == false) {
       fetchMainTypeData();
@@ -492,10 +602,18 @@ class HomeController extends GetxController {
       fetchProductsData();
       checkAboutUserAccount();
       GetgenerateRandomOrderNumberFromMemory();
+      fetchOrder();
+      fetchOffersOrders();
       Future.delayed(const Duration(seconds: 120), () async {
         isGetData.value = true;
       });
     } else {}
+  }
+
+  @override
+  void onClose() {
+    scrollController.dispose();
+    super.onClose();
   }
 
   //////////////////////////////#############################################################/////////////////////////
@@ -554,6 +672,7 @@ class HomeController extends GetxController {
   RxBool MessageAddedIntoList = false.obs;
 
   addIntoOrder(String numberOrder, String total) async {
+    waitAddOrder.value = true;
     initializeDateFormatting();
     Intl.defaultLocale = 'ar';
     DateTime now = DateTime.now();
@@ -575,26 +694,33 @@ class HomeController extends GetxController {
     });
 
     if (response['status'] == "success") {
-      Future.delayed(const Duration(seconds: 3), () async {
+      Future.delayed(const Duration(seconds: 1), () async {
         fetchOrderCart(
           numberOrder.toString(),
         );
       });
-      Future.delayed(const Duration(seconds: 6), () async {
+      Future.delayed(const Duration(seconds: 3), () async {
         addOrder.value = false;
         countTheOrderStep.value = 2;
         showThePartOFOrder.value = true;
+        messageCreateOrder.value = true;
         CelarRandomNumber();
+        dataProductsListCart.clear();
+        waitAddOrder.value = false;
       });
     } else {}
     return response;
   }
 
-  RxInt getIdOfListProducts = 0.obs;
+  var listOrderProductIdNew;
   addIntListProducts(String numberOrder, String total, String productId,
       String quantity) async {
+    Random random = new Random();
+
+    listOrderProductIdNew = random.nextInt(10000000);
     var response =
         await crud.postRequest(AppLinksApi.addIntoOrderListProducts, {
+      'list_order_product_id': listOrderProductIdNew.toString(),
       'product_id': productId.toString(),
       'user_id': displayUserId.value.toString(),
       'total': total.toString(),
@@ -603,8 +729,6 @@ class HomeController extends GetxController {
     });
 
     if (response['status'] == "success") {
-      getIdOfListProducts.value = int.tryParse(
-          response['data'][0]['list_order_product_id'].toString())!;
     } else {}
     return response;
   }
@@ -671,60 +795,56 @@ class HomeController extends GetxController {
   ////////////////////////
 
   RxBool isNotEmptyListOFProductsCart = false.obs;
-  var dataProductsListCart = <ListOfProductsCart>[].obs;
 
   RxInt totalPrice = RxInt(0); // إضافة متغير جديد لحساب السعر الإجمالي
-
+  var dataProductsListCart = <ListOfProductsCart>[].obs;
   Future<void> fetchProductsDataCart() async {
     var response = await http.post(Uri.parse(AppLinksApi.getListOfProducts),
         body: {'order_number': randomNumber.toString()});
 
-    //////////////////
     if (response.statusCode == 200) {
-      var data = json.decode(response.body)["data"];
-      if (data != null) {
-        dataProductsListCart.value = data
-            .map<ListOfProductsCart>((e) => ListOfProductsCart.fromJson(e))
-            .toList();
-        totalPrice.value = dataProductsListCart.fold(
-            0, (sum, item) => sum + (int.parse(item.total)));
+      List data = json.decode(response.body)["data"];
 
-        dataProductsListCart.length == 0
-            ? isNotEmptyListOFProductsCart.value = false
-            : isNotEmptyListOFProductsCart.value = true;
-      } else {
-        isNotEmptyListOFProductsCart.value = false;
-        print("Error: ${response.statusCode}");
-      }
+      dataProductsListCart.value = data
+          .map<ListOfProductsCart>((e) => ListOfProductsCart.fromJson(e))
+          .toList();
+
+      totalPrice.value = dataProductsListCart.fold(
+          0, (sum, item) => sum + (int.parse(item.total)));
+
+      dataProductsListCart.length == 0
+          ? isNotEmptyListOFProductsCart.value = false
+          : isNotEmptyListOFProductsCart.value = true;
+    } else {
+      isNotEmptyListOFProductsCart.value = false;
+      print("Error: ${response.statusCode}");
     }
-
-    ///////
   }
+
+  ///////
 
   //////////////Ex List.........................////////
 
   RxBool isNotEmptyListOFProductsExtCart = false.obs;
   var dataProductsListExtCart = <ExtrasList>[].obs;
-  Future<void> fetchProductsExtDataCart(String id) async {
+  Future fetchProductsExtDataCart(String id) async {
     var response = await http.post(Uri.parse(AppLinksApi.getListOfProductsExt),
         body: {'list_order_product_id': id.toString()});
 
     if (response.statusCode == 200) {
       var data = json.decode(response.body)["data"];
-      //  if (data != null) {
-      // هنا نضيف الشرط
-      dataProductsListExtCart.value =
+
+      dataProductsListExtCart =
           data.map<ExtrasList>((e) => ExtrasList.fromJson(e)).toList();
 
       dataProductsListExtCart.length == 0
           ? isNotEmptyListOFProductsExtCart.value = false
           : isNotEmptyListOFProductsExtCart.value = true;
-      // } else {
-      //  isNotEmptyListOFProductsExtCart.value = false;
-      //  print("Error: ${response.statusCode}");
-      // }
+    } else {
+      isNotEmptyListOFProductsExtCart.value = false;
     }
   }
+
 //////////////Order INListCart.........................////////
 
   RxInt orderNumberFromDataBase = 0.obs;
@@ -796,6 +916,7 @@ class HomeController extends GetxController {
   viewOrderList() {
     showTheOrderList.value = true;
     fetchOrder();
+    fetchOffersOrders();
   }
 
   ////////////////////////////...........Token and Location.........................//////////////
@@ -814,22 +935,6 @@ class HomeController extends GetxController {
 
   /////////////////////////////////////............... Location........................./////////////
   RxString address = "لايوجد عنوان".obs;
-  Future getPo() async {
-    bool services;
-    LocationPermission per;
-    services = await Geolocator.isLocationServiceEnabled();
-    if (services == true) {
-      per = await Geolocator.checkPermission();
-      if (per == LocationPermission.denied) {
-        per = await Geolocator.requestPermission();
-      } else {
-        await Geolocator.getCurrentPosition().then((value) {
-          myCurrentPositionLatitude = value.latitude;
-          myCurrentPositionLongitude = value.longitude;
-        });
-      }
-    }
-  }
 
   Future checkIsEnableLocationServices() async {
     checkTheLocation.value = true;
@@ -942,6 +1047,17 @@ class HomeController extends GetxController {
   RxBool isNotEmptyProducrsSearching = false.obs;
   var dataProductsListSearching = <Products>[].obs;
 
+  /////////////////////////////#######################..................... Products Details Searching .................../////////////
+  RxBool showTheDetailsProductSearching = false.obs;
+  RxInt indexTheProductsListSearching = 0.obs;
+  goToDetailsProductsSearhcing(var index) {
+    indexTheProductsListSearching.value = index;
+    showTheDetailsProductSearching.value = true;
+    PriceProducts.value = int.tryParse(dataProductsListByType[index].price)!;
+
+    theTotalPrice.value = int.tryParse(dataProductsListSearching[index].price)!;
+  }
+
   Future<void> fetchProductsDataSearching(String searching) async {
     var response =
         await http.post(Uri.parse(AppLinksApi.getProductsBySearching), body: {
@@ -962,4 +1078,221 @@ class HomeController extends GetxController {
       print("Error: ${response.statusCode}");
     }
   }
+
+  ///////////////////////..........Animtation Offers......................../////////////
+
+//////////////////////////Delete Order Shopping Cart..................................../
+
+  deleteFromShoppingCart(String idProductsShoppingCart) async {
+    var response = await crud.postRequest(AppLinksApi.deleteFromItemsCart, {
+      'user_id': displayUserId.value.toString(),
+      'list_order_product_id': idProductsShoppingCart.toString(),
+    });
+
+    if (response['status'] == "success") {
+      fetchProductsDataCart();
+    } else {}
+    return response;
+  }
+
+  deleteAllCart(String radnomNumber) async {
+    var response = await crud.postRequest(AppLinksApi.deleteALLITMESCART, {
+      'user_id': displayUserId.value.toString(),
+      'order_number': radnomNumber.toString(),
+    });
+
+    if (response['status'] == "success") {
+      showCart.value = false;
+      totalPrice.value = 0;
+      dataProductsListCart.clear();
+      CelarRandomNumber();
+    } else {}
+    return response;
+  }
+
+  ///////////////////////...................Offers Orders............................///////////
+
+  RxInt PriceOffers = 0.obs;
+  RxInt theTotalPriceOffers = 0.obs;
+
+  RxBool showOffersDetials = false.obs;
+  RxBool messagesAboutOfersInOrder = false.obs;
+  RxInt indexTheOfferssList = 0.obs;
+  goToDetailsOfers(var index) {
+    indexTheOfferssList.value = index;
+    showOffersDetials.value = true;
+    PriceOffers.value = int.tryParse(dataOffersList[index].price)!;
+    theTotalPriceOffers.value = int.tryParse(dataOffersList[index].price)!;
+  }
+
+  //////////////////Add To Cart OR order.........................../////////
+
+  RxInt TheNumberOfItmeOffers = 1.obs;
+
+  AddTheItmeOffers() {
+    TheNumberOfItmeOffers.value = TheNumberOfItmeOffers.value + 1;
+
+    theTotalPriceOffers.value = PriceOffers.value * TheNumberOfItmeOffers.value;
+  }
+
+  MusnheItmeOffers() {
+    if (TheNumberOfItme.value != 1) {
+      TheNumberOfItme.value = TheNumberOfItmeOffers.value - 1;
+
+      theTotalPriceOffers.value =
+          PriceOffers.value * TheNumberOfItmeOffers.value;
+    } else {}
+  }
+
+  //////////////Add Order IN Offers....................../
+  addOffer(String idOffer, String total, String quantity) async {
+    initializeDateFormatting();
+    Intl.defaultLocale = 'ar';
+    DateTime now = DateTime.now();
+    String format = 'hh:mm a';
+    DateFormat formatter = DateFormat(format, 'ar');
+
+    String arabicTime = formatter.format(now);
+    var response = await crud.postRequest(AppLinksApi.addOrderOffers, {
+      'user_id': displayUserId.value.toString(),
+      'offer_id': idOffer.toString(),
+      'quantity': quantity.toString(),
+      'total': total.toString(),
+      'time_order_user': arabicTime.toString(),
+      'date_order_user':
+          "${DateFormat.MMM().format(DateTime.now()).toString()}-"
+              "${DateFormat.d().format(DateTime.now()).toString()}",
+    });
+
+    if (response['status'] == "success") {
+      messagesAboutOfersInOrder.value = true;
+    } else {}
+    return response;
+  }
+
+/////////////////////
+  RxBool showDetailsOrderInOrderList = false.obs;
+  RxInt indexTheOrder = 0.obs;
+  goToDetailsOrder(var index) {
+    indexTheOrder.value = index;
+    showDetailsOrderInOrderList.value = true;
+  }
+
+  ////////////////////.....................................///////////
+
+  RxBool whatisTheOrder = false.obs;
+
+  RxBool isNotEmptyOffersOrders = false.obs;
+  var dataListOffers = <ListOfOrderOffers>[].obs;
+
+  Future<void> fetchOffersOrders() async {
+    var response =
+        await http.post(Uri.parse(AppLinksApi.getOrderOffers), body: {
+      "user_id": displayUserId.value.toString(),
+    });
+
+    if (response.statusCode == 200) {
+      List data = json.decode(response.body)["data"];
+
+      dataListOffers.value =
+          data.map((e) => ListOfOrderOffers.fromJson(e)).toList();
+
+      dataListOffers.length == 0
+          ? isNotEmptyOffersOrders.value = false
+          : isNotEmptyOffersOrders.value = true;
+    } else {
+      isNotEmptyOffersOrders.value = false;
+      print("Error: ${response.statusCode}");
+    }
+  }
+
+  RxInt indexTheOrderOffers = 0.obs;
+  RxBool showDetailsOrderInOrderListOffers = false.obs;
+
+  goToDetailsOrderOffers(var index) {
+    indexTheOrderOffers.value = index;
+    showDetailsOrderInOrderListOffers.value = true;
+  }
+
+/////////////////..........Is Have Location - is Have Account...............//////////
+  RxBool isNoAccount = false.obs;
+  RxBool isNoLocation = false.obs;
+
+  RxBool messageCreateOrder = false.obs;
+  RxBool waitAddExtProducts = false.obs;
+  RxBool waitAddOrder = false.obs;
+
+  RxBool messagenoCart = false.obs;
+
+  checkTheCartItems() {
+    if (randomNumber == 0) {
+      messagenoCart.value = true;
+    }
+  }
+
+  ///////////// Internet............./////////
+  var connectivityStatus = ''.obs;
+  void checkConnectivity() async {
+    Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+      if (result == ConnectivityResult.none) {
+        connectivityStatus.value = 'لا يوجد اتصال بالإنترنت';
+      } else {
+        connectivityStatus.value = 'متصل بالإنترنت';
+      }
+    });
+  }
+
+  //////////////////////////////................... Offers...........................................//
+
+  RxBool isLocationAcquired =
+      false.obs; // إضافة متغير حالة لتتبع الحصول على الموقع
+
+  Future getPo() async {
+    bool services;
+    LocationPermission per;
+    services = await Geolocator.isLocationServiceEnabled();
+    if (services) {
+      per = await Geolocator.checkPermission();
+      if (per == LocationPermission.denied) {
+        per = await Geolocator.requestPermission();
+      }
+      if (per == LocationPermission.whileInUse ||
+          per == LocationPermission.always) {
+        await Geolocator.getCurrentPosition().then((value) {
+          myCurrentPositionLatitude = value.latitude;
+          myCurrentPositionLongitude = value.longitude;
+          isLocationAcquired.value = true; // تحديث الحالة بعد الحصول على الموقع
+        });
+      }
+    }
+  }
+
+  var scrollController = ScrollController();
+  void startAutoScroll() {
+    const autoScrollDuration = Duration(seconds: 7);
+    Timer.periodic(autoScrollDuration, (timer) {
+      if (isLocationAcquired.value) {
+        // التحقق من الحالة قبل التمرير
+        final maxScroll = scrollController.position.maxScrollExtent;
+        final currentScroll = scrollController.position.pixels;
+        final scrollAmount = 205.w; // حسب حجم العنصر الخاص بك
+
+        if (currentScroll + scrollAmount >= maxScroll) {
+          scrollController.animateTo(
+            0.0,
+            duration: Duration(seconds: 2),
+            curve: Curves.easeOut,
+          );
+        } else {
+          scrollController.animateTo(
+            currentScroll + scrollAmount,
+            duration: Duration(seconds: 2),
+            curve: Curves.easeOut,
+          );
+        }
+      } else {}
+    });
+  }
+
+  /////////////////
 }
