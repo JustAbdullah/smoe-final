@@ -4,14 +4,12 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:firebase_core/firebase_core.dart';
-
+import 'package:smoe_app_final/views/testingg.dart';
 import 'firebase_options.dart';
 import 'core/constant/color_primary.dart';
 import 'core/localization/changelanguage.dart';
 import 'core/localization/translation.dart';
 import 'core/services/appservices.dart';
-
-import 'views/loadingScreen/loading_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -61,7 +59,7 @@ class MyApp extends StatelessWidget {
       home: Scaffold(
           body: SafeArea(
               child: ScreenUtilInit(
-                  designSize: Size(360, 690), child: LoadingScreen()))),
+                  designSize: Size(360, 690), child: MyAppNew()))),
       theme: ThemeData(primarySwatch: ModeColor.mode),
       builder: (context, child) {
         final mediaQueryData = MediaQuery.of(context);
